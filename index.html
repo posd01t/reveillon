@@ -1,0 +1,1390 @@
+<title>On part où ?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style id="css">
+:root{
+  --ground:#EDEEE8; --surface:#F7F8F3; --surface-2:#E4E7DE; --line:#CBD1C4;
+  --ink:#1B2320; --ink-2:#55605A; --ink-3:#7C877F;
+  --accent:#A63A2B; --forest:#33523F; --gold:#8A6A1F;
+  --oui:#3C6B4A; --bof:#8A6A1F; --non:#8A928B;
+  --shadow:0 1px 0 rgba(27,35,32,.05);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#131714; --surface:#1C221E; --surface-2:#252C27; --line:#333C36;
+    --ink:#E9ECE3; --ink-2:#A2ADA4; --ink-3:#7C877F;
+    --accent:#E3765F; --forest:#87B295; --gold:#D3B063;
+    --oui:#7FBE93; --bof:#D3B063; --non:#79837B;
+    --shadow:0 1px 0 rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#131714; --surface:#1C221E; --surface-2:#252C27; --line:#333C36;
+  --ink:#E9ECE3; --ink-2:#A2ADA4; --ink-3:#7C877F;
+  --accent:#E3765F; --forest:#87B295; --gold:#D3B063;
+  --oui:#7FBE93; --bof:#D3B063; --non:#79837B;
+  --shadow:0 1px 0 rgba(0,0,0,.3);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);
+  font-family:"Source Serif 4",Georgia,serif;font-size:17px;line-height:1.6;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px;margin:0 auto;padding:0 24px 140px}
+
+header{padding:56px 0 30px;display:flex;flex-direction:column;gap:18px}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ink-3)}
+h1{font-family:"Bricolage Grotesque",Arial,sans-serif;font-weight:800;
+  font-size:clamp(2.3rem,6vw,3.7rem);line-height:.98;letter-spacing:-.025em;margin:0;
+  text-wrap:balance}
+h1 em{font-style:normal;color:var(--accent)}
+.standfirst{font-size:1.1rem;color:var(--ink-2);max-width:62ch;margin:0}
+
+.brief{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1px;
+  background:var(--line);border:1px solid var(--line);margin:8px 0 0}
+.brief div{background:var(--surface);padding:13px 15px;display:flex;flex-direction:column;gap:3px}
+.brief dt{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--ink-3)}
+.brief dd{margin:0;font-family:"Bricolage Grotesque",sans-serif;font-weight:600;
+  font-size:1rem;font-variant-numeric:tabular-nums}
+.brief dd small{display:block;font-family:"Source Serif 4",Georgia,serif;font-weight:400;
+  font-size:.83rem;color:var(--ink-3);letter-spacing:0;margin-top:2px;line-height:1.3}
+.dists dt b{font-weight:600;color:var(--ink-2)}
+.hint{display:inline-block;margin-top:6px;font-family:"IBM Plex Mono",monospace;
+  font-size:11px;letter-spacing:.04em;color:var(--ink-3)}
+
+h2{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:1.45rem;
+  letter-spacing:-.015em;margin:0}
+.section-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;
+  padding-bottom:11px;margin:56px 0 20px;border-bottom:2px solid var(--ink)}
+.section-head .step{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--accent);font-weight:600}
+.section-head .count{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-3);margin-left:auto}
+.section-note{font-size:.95rem;color:var(--ink-2);margin:-6px 0 22px;max-width:64ch}
+
+/* --- accueil : prénom + toggle --- */
+.gate{background:var(--surface);border:1px solid var(--ink);padding:24px;
+  display:flex;flex-direction:column;gap:18px;margin-top:8px}
+.gate h3{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:1.15rem;margin:0;
+  display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.rename{background:none;border:none;cursor:pointer;font-family:"IBM Plex Mono",monospace;
+  font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);padding:2px 4px}
+.rename:hover{color:var(--accent)}
+.gate p{margin:0;color:var(--ink-2);font-size:.97rem}
+.gate .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.gate input[type=text]{flex:1 1 220px;background:var(--ground);color:var(--ink);
+  border:1px solid var(--line);border-radius:2px;padding:11px 13px;
+  font-family:"Source Serif 4",Georgia,serif;font-size:1rem}
+.gate input[type=text]:focus{outline:2px solid var(--accent);outline-offset:1px}
+
+.toggle{display:grid;gap:1px;background:var(--line);border:1px solid var(--line)}
+.toggle button{background:var(--surface);border:none;cursor:pointer;text-align:left;
+  padding:15px 17px;display:flex;flex-direction:column;gap:4px;color:var(--ink);
+  font-family:"Source Serif 4",Georgia,serif}
+.toggle button .t{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:1rem}
+.toggle button .d{font-size:.92rem;color:var(--ink-2);line-height:1.45}
+.toggle button.on{background:var(--surface-2);box-shadow:inset 3px 0 0 var(--accent)}
+.toggle button.on .t{color:var(--accent)}
+@media (min-width:620px){.toggle{grid-template-columns:1fr 1fr}}
+
+/* --- fiches --- */
+.houses{display:grid;gap:14px}
+.house{background:var(--surface);border:1px solid var(--line);padding:20px 22px;
+  display:grid;grid-template-columns:1fr auto;gap:6px 26px;align-items:start;box-shadow:var(--shadow)}
+.house.v-oui{border-color:var(--oui);border-left-width:3px}
+.house.v-bof{border-color:var(--bof);border-left-width:3px}
+.house.v-non{opacity:.62}
+.house .head{display:flex;flex-direction:column;gap:4px}
+.house h3{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:1.16rem;
+  margin:0;line-height:1.2;letter-spacing:-.01em;display:flex;gap:9px;align-items:baseline}
+.pin{font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--accent);
+  font-weight:600;flex:none;padding-top:2px}
+.house h3 a{color:inherit;text-decoration:none;
+  background-image:linear-gradient(var(--accent),var(--accent));background-size:100% 1px;
+  background-repeat:no-repeat;background-position:0 100%;padding-bottom:1px}
+.house h3 a:hover{color:var(--accent)}
+.place{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-3);display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.src{border:1px solid var(--line);padding:1px 6px;border-radius:2px;color:var(--ink-2);letter-spacing:.06em}
+.src.gdc{border-color:var(--forest);color:var(--forest)}
+.money{text-align:right;display:flex;flex-direction:column;gap:2px;white-space:nowrap}
+.total{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:1.45rem;
+  font-variant-numeric:tabular-nums;line-height:1;letter-spacing:-.02em}
+.per{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--ink-3);
+  letter-spacing:.04em;font-variant-numeric:tabular-nums}
+.body{grid-column:1/-1;display:flex;flex-direction:column;gap:10px;margin-top:8px}
+.block{display:flex;flex-direction:column;gap:9px;padding-top:14px;border-top:1px solid var(--line)}
+.block:first-child{padding-top:0;border-top:none}
+.blabel{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;
+  font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--ink-3)}
+.blabel .step{color:var(--accent);font-weight:600}
+.blabel .tally{letter-spacing:.04em;text-transform:none;font-size:11.5px;color:var(--ink-2)}
+.blabel .tally b{color:var(--ink);font-weight:600}
+.bld{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:1.02rem;
+  display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.bld.multi{color:var(--bof)}
+.bld span{font-family:"Source Serif 4",Georgia,serif;font-weight:400;font-size:.94rem;color:var(--ink-2)}
+.dists{display:flex;gap:1px;background:var(--line);border:1px solid var(--line);flex-wrap:wrap}
+.dists div{background:var(--ground);padding:9px 15px;display:flex;flex-direction:column;gap:1px;flex:1 1 110px}
+.dists dt{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-3)}
+.dists dd{margin:0;font-family:"Bricolage Grotesque",sans-serif;font-weight:600;
+  font-size:.98rem;font-variant-numeric:tabular-nums}
+.dists dd small{font-family:"IBM Plex Mono",monospace;font-weight:400;font-size:10px;
+  color:var(--ink-3);letter-spacing:.03em;margin-left:5px}
+.train{margin:0;font-size:.93rem;color:var(--ink-2);border-left:2px solid var(--forest);padding-left:11px}
+.train b{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--forest);display:block;margin-bottom:2px;font-weight:600}
+.extra{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.03em;
+  display:grid;grid-template-columns:auto 1fr;gap:9px;padding:8px 11px;border-radius:2px;
+  background:var(--surface-2);line-height:1.5}
+.extra .mark{font-weight:600}
+.extra.yes .mark{color:var(--oui)} .extra.part .mark{color:var(--bof)}
+.extra.none .mark{color:var(--ink-3)}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.06em;
+  text-transform:uppercase;padding:3px 8px;border-radius:2px;background:var(--surface-2);color:var(--ink-2)}
+.tag.hot{background:transparent;border:1px solid var(--accent);color:var(--accent)}
+.tag.spa{background:transparent;border:1px solid var(--gold);color:var(--gold)}
+.pierre{font-size:.95rem;color:var(--ink-2);border-left:2px solid var(--gold);padding-left:11px}
+.pierre b{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--gold);display:block;margin-bottom:2px;font-weight:600}
+
+/* --- couchages --- */
+.sleep-scroll{overflow-x:auto;margin:0 -22px;padding:2px 22px 6px;scroll-snap-type:x proximity}
+.bedcards{display:flex;gap:10px;min-width:min-content}
+.bedcard{flex:0 0 152px;scroll-snap-align:start;border:1px solid var(--line);border-radius:10px;
+  background:var(--ground);padding:13px 14px 14px;display:flex;flex-direction:column;gap:7px;min-height:118px}
+.bedcard.adult{border-color:var(--forest)}
+.bedcard .icons{display:flex;gap:5px;align-items:flex-end;color:var(--ink-2);min-height:26px}
+.bedcard.adult .icons{color:var(--forest)}
+.bedcard svg{display:block}
+.bedcard .nm{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:.9rem;
+  line-height:1.2;letter-spacing:-.005em}
+.bedcard .bd{font-size:.85rem;color:var(--ink-2);line-height:1.35}
+.bedcard .xtra{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--ink-3);margin-top:auto;padding-top:5px}
+.bedcard.unknown{color:var(--ink-3)}
+.bedcard.unknown .nm{color:var(--ink-2)}
+.bedgroups{display:flex;flex-direction:column;gap:14px}
+.bedgroup{display:flex;flex-direction:column;gap:8px;border-left:2px solid var(--bof);padding-left:13px}
+.glabel{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.glabel .gname{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:.97rem}
+.glabel .gcount{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-3)}
+.glabel .gnote{font-size:.9rem;color:var(--ink-2);flex-basis:100%}
+.bedgroup .sleep-scroll{margin:0 -22px 0 0;padding:2px 22px 6px 0}
+.flag{font-size:.9rem;color:var(--ink-3);font-style:italic;border-left:2px solid var(--line);padding-left:10px}
+
+/* --- vote --- */
+.vote{grid-column:1/-1;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);
+  display:flex;flex-direction:column;gap:10px}
+.vrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.vrow .lbl{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--ink-3);margin-right:4px}
+.vbtn{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:.95rem;
+  background:var(--ground);color:var(--ink-2);border:1px solid var(--line);
+  padding:8px 16px;border-radius:2px;cursor:pointer;display:flex;align-items:center;gap:7px}
+.vbtn:hover{border-color:var(--ink-3)}
+.vbtn .fl{width:11px;height:11px;border-radius:2px;background:var(--line);flex:none}
+.vbtn[data-v=oui] .fl{background:var(--oui)}
+.vbtn[data-v=bof] .fl{background:var(--bof)}
+.vbtn[data-v=non] .fl{background:var(--non)}
+.vbtn.on{color:var(--ink);border-color:currentColor;background:var(--surface-2)}
+.vbtn[data-v=oui].on{border-color:var(--oui);color:var(--oui)}
+.vbtn[data-v=bof].on{border-color:var(--bof);color:var(--bof)}
+.vbtn[data-v=non].on{border-color:var(--non);color:var(--non)}
+.others{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink-2);
+  letter-spacing:.02em;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.others .who{color:var(--ink-3)}
+.others b{font-weight:600}
+.others .o{color:var(--oui)} .others .b{color:var(--bof)} .others .x{color:var(--non)}
+.hidden-note{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-3);
+  letter-spacing:.03em;font-style:normal}
+
+/* --- classement --- */
+.rank{display:flex;flex-direction:column;gap:8px}
+.rankrow{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;
+  background:var(--surface);border:1px solid var(--line);padding:12px 14px}
+.rankrow.oui{border-left:3px solid var(--oui)}
+.rankrow.bof{border-left:3px solid var(--bof)}
+.rankrow .pos{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:1.2rem;
+  color:var(--accent);font-variant-numeric:tabular-nums;min-width:26px}
+.rankrow .nm{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:1rem;line-height:1.25}
+.rankrow .sub{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--ink-3);
+  letter-spacing:.05em;text-transform:uppercase;display:block;margin-top:2px}
+.rankrow .mv{display:flex;gap:5px}
+.rankrow .mv button{background:var(--ground);border:1px solid var(--line);color:var(--ink-2);
+  width:34px;height:34px;border-radius:2px;cursor:pointer;font-size:15px;line-height:1}
+.rankrow .mv button:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
+.rankrow .mv button:disabled{opacity:.3;cursor:default}
+
+/* --- verdict --- */
+.verdict{display:flex;flex-direction:column;gap:16px}
+.reasons{display:flex;gap:8px;flex-wrap:wrap}
+.rbtn{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.06em;
+  text-transform:uppercase;background:var(--ground);color:var(--ink-2);
+  border:1px solid var(--line);padding:7px 13px;border-radius:2px;cursor:pointer}
+.rbtn.on{border-color:var(--accent);color:var(--accent);background:var(--surface-2)}
+textarea{width:100%;min-height:80px;resize:vertical;background:var(--ground);color:var(--ink);
+  border:1px solid var(--line);border-radius:2px;padding:11px 13px;
+  font-family:"Source Serif 4",Georgia,serif;font-size:.97rem;line-height:1.5}
+textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
+textarea::placeholder{color:var(--ink-3);font-style:italic}
+
+/* --- résultats --- */
+.results{display:flex;flex-direction:column;gap:9px}
+.rres{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;
+  background:var(--surface);border:1px solid var(--line);padding:11px 14px}
+.rres .nm{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:.98rem}
+.rres .sub{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--ink-3);
+  letter-spacing:.05em;display:block;margin-top:2px}
+.bar{display:flex;height:9px;width:170px;background:var(--surface-2);border-radius:2px;overflow:hidden}
+.bar i{display:block;height:100%}
+.bar .o{background:var(--oui)} .bar .b{background:var(--bof)} .bar .x{background:var(--non)}
+.rres .num{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink-2);
+  white-space:nowrap;font-variant-numeric:tabular-nums}
+
+.savebar{position:sticky;bottom:0;z-index:20;margin-top:36px;background:var(--surface);
+  border:1px solid var(--ink);display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  padding:13px 18px;box-shadow:0 -3px 14px rgba(0,0,0,.09)}
+.savebar .status{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink-2);
+  letter-spacing:.03em;flex:1;min-width:170px}
+.savebar .status b{color:var(--ink);font-variant-numeric:tabular-nums}
+button.primary{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:.95rem;
+  background:var(--ink);color:var(--ground);border:1px solid var(--ink);padding:9px 18px;
+  border-radius:2px;cursor:pointer}
+button.primary:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+button.primary:disabled{opacity:.4;cursor:default}
+button.ghost{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:.95rem;
+  background:none;color:var(--ink);border:1px solid var(--line);padding:9px 16px;
+  border-radius:2px;cursor:pointer}
+button.ghost:hover{border-color:var(--accent);color:var(--accent)}
+
+dialog{border:1px solid var(--ink);background:var(--surface);color:var(--ink);
+  max-width:620px;width:92%;padding:22px;border-radius:2px}
+dialog::backdrop{background:rgba(0,0,0,.45)}
+dialog h4{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;margin:0 0 4px;font-size:1.1rem}
+dialog p{margin:0 0 12px;font-size:.93rem;color:var(--ink-2)}
+dialog textarea{height:260px;font-family:"IBM Plex Mono",monospace;font-size:12px}
+dialog .row{display:flex;justify-content:flex-end;gap:10px;margin-top:12px}
+
+footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);
+  font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-3);
+  letter-spacing:.04em;line-height:1.7}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (max-width:640px){
+  .house{grid-template-columns:1fr}
+  .money{text-align:left;flex-direction:row;align-items:baseline;gap:10px}
+  header{padding-top:36px}
+  .bar{width:110px}
+}
+</style>
+
+<script id="app-state" type="application/json">{"voters":{}}</script>
+<div id="root"></div>
+
+<script id="app">
+/* ------------------------------------------------------------------
+   CONFIGURATION — les deux adresses à remplir une fois pour toutes.
+   FORM_ACTION : l'URL "formResponse" du formulaire Google.
+   ENTRY       : l'identifiant de chaque question du formulaire.
+   CSV         : le Sheet des réponses, publié sur le web au format CSV.
+   Tant que FORM_ACTION est vide, la page fonctionne en local seulement.
+------------------------------------------------------------------- */
+var CFG = {
+  FORM_ACTION: "",
+  ENTRY: { nom:"", votes:"", classement:"", verdict:"", raisons:"", note:"" },
+  CSV: ""
+};
+
+var state = { voters: {} };
+/* Les votes des autres viennent du Sheet publié, plus d'un état embarqué. */
+if(!state.voters) state.voters = {};
+var loadingOthers = false, othersError = false;
+
+var me = null, showOthers = null, dirty = false, artifactNs = null, canWrite = null;
+try { me = localStorage.getItem('vote-nom') || null; } catch(e){}
+try { var so = localStorage.getItem('vote-voir'); if(so !== null) showOthers = (so === '1'); } catch(e){}
+
+var PIERRE = {
+ lorris:"L'annonce n'est pas top : pas de photo de l'espace sauna ni de la salle de sport. Si on la garde au prochain tour, il faudra demander des photos.",
+ boislandry:"Moins stylé, mais moins cher que les autres avec piscine intérieure.",
+ favril:"Sympa, mais deux maisons, peut-être pas idéal. Et pas d'extra.",
+ sylvains:"La fiche plafonne à 15 voyageurs et on est 15 plus un bébé : à faire confirmer.",
+ cinqmars:"Le sauna et le jacuzzi se paient à la journée, en plus du loyer.",
+ annay:"La même maison est aussi sur Airbnb, 414 € plus cher. On réserverait côté Gens de Confiance."
+};
+
+var REASONS = ["trop cher","trop loin","pas assez beau","couchages trop justes","pas assez d'équipements","mauvaises dates"];
+var ALL_HOUSES = [
+ { id:'chateaulandon', n:1, name:"Le Moulin de Château-Landon", src:'airbnb', star:true,
+   url:"https://www.airbnb.fr/rooms/1122978102638869895?check_in=2026-12-30&check_out=2027-01-02&adults=9&children=6&infants=1",
+   commune:"Château-Landon (77)", km:105, lat:48.15, lng:2.70, rating:"5,0",
+   price:"4 400 €", per:"163 € / adulte / nuit", sort:4400, band:1,
+   extra:'yes', extraTxt:"Piscine privative 10 × 5 m, couverte et chauffée, OUVERTE TOUTE L'ANNÉE. Vérifié dans le texte de l'annonce.",
+   rooms:"7 chambres · 13 lits · 4 salles de bain\nCh. 1 : lit double + sdb attenante · Ch. 2 : 2 lits simples · Ch. 3, 4, 5, 6 : lit double\nCh. 7 : lit queen + lit simple, sdb attenante · Annexe en supplément → jusqu'à 22 couchages",
+   desc:"Un moulin dont le <strong>mécanisme d'origine est resté apparent</strong> dans la pièce de vie, avec poêle à bois pour les soirées d'hiver. Six chambres à lit double ou queen : les 3 couples et les 3 solos ont chacun leur porte, et la chambre 2 fait le dortoir enfants. Billard, salle de jeux pour enfants, ping-pong, jeux de société. Parc et étang.",
+   tags:[["Piscine couverte chauffée · toute l'année",'spa'],['Poêle à bois','hot'],['Billard',''],['Salle de jeux enfants',''],['Ping-pong','']],
+   flag:"Pile au plafond : 4 400 €. L'annexe pour la famille d'Avignon est facturée en supplément." },
+
+ { id:'lorris', n:2, name:"La maison de charme et sa grange", src:'gdc', star:true,
+   url:"https://www.gensdeconfiance.com/fr/annonce/loue-maison-de-charme-a-1h30-de-paris-plus-de-14-personnes-bb41f58",
+   commune:"Lorris (45)", km:135, lat:47.89, lng:2.51, rating:"5,0",
+   price:"2 363 €", per:"88 € / adulte / nuit", sort:2363, band:1, was:"annoncé ~2 100 €",
+   extra:'yes', extraTxt:"Espace sauna + salle de sport avec douche dans la grange. Tu l'avais vu, je l'avais raté.",
+   rooms:"8 chambres au total sur deux bâtiments\nMaison : 1 ch. au RDC avec salle d'eau et WC · 4 ch. à l'étage · 2 salles d'eau\nGrange attenante : 3 ch. à l'étage · 1 salle de bain",
+   desc:"La grange n'est pas une dépendance mais une seconde maison : cuisine au rez-de-chaussée, <strong>espace sauna et salle de sport avec douche</strong>, et à l'étage une salle de jeux avec <strong>billard, babyfoot et home cinéma</strong>. Dans la maison, vaste cuisine-salle à manger-séjour avec cheminée, bibliothèque et salon TV à part. Deux hectares, et toutes les commodités à pied.",
+   tags:[['Sauna','spa'],['Salle de sport','spa'],['Cheminée au séjour','hot'],['Billard · babyfoot · home cinéma',''],['Commerces à pied',''],['Piscine','']],
+   flag:"Piscine non chauffée, sans intérêt en décembre. Répartition exacte des lits à demander." },
+
+ { id:'gueleger', n:3, name:"Le Gué Léger", src:'airbnb', star:true,
+   url:"https://www.airbnb.fr/rooms/879410232948559691?check_in=2026-12-30&check_out=2027-01-02&adults=9&children=6&infants=1",
+   commune:"Chanceaux-près-Loches (37)", km:273, lat:47.19, lng:1.06, rating:"4,98",
+   price:"3 935 €", per:"146 € / adulte / nuit", sort:3935, band:3,
+   extra:'yes', extraTxt:"Sauna privatif 6 personnes ET jacuzzi privatif 5 personnes, tous deux disponibles toute l'année. Piscine chauffée de mars à novembre.",
+   rooms:"7 chambres · 9 lits · 5 salles de bain\n6 chambres spacieuses avec lit Queen Size\n1 chambre avec lit simple et lit superposé",
+   desc:"Le paquet complet, et la meilleure note de toute la recherche. <strong>Six chambres en lit queen</strong> — trois couples, trois solos, chacun chez soi — plus une chambre enfants. Sauna et jacuzzi privatifs, cheminée et poêles à granulés, billard, salle de jeux pour enfants. 400 m² habitables, 1 500 m² de jardin, la maison la plus proche à 500 m.",
+   tags:[['Sauna privatif','spa'],["Jacuzzi · toute l'année",'spa'],['Piscine chauffée mars-nov','spa'],['Cheminée + poêles granulés','hot'],['Billard',''],['Salle de jeux enfants','']],
+   flag:"273 km, soit 3h de Paris. C'est le prix à payer pour tout avoir." },
+
+ { id:'esternay', n:4, name:"La ferme d'Esternay", src:'airbnb',
+   url:"https://www.airbnb.fr/rooms/14849634?check_in=2026-12-30&check_out=2027-01-02&adults=9&children=6&infants=1",
+   commune:"Esternay (51)", km:112, lat:48.73, lng:3.56, rating:"4,87",
+   price:"4 391 €", per:"163 € / adulte / nuit", sort:4391, band:1,
+   extra:'yes', extraTxt:"Piscine intérieure privée chauffée à 30°, disponible toute l'année, plus un jacuzzi privé. Confirmé par la liste d'équipements ET le texte.",
+   rooms:"7 chambres · 8 lits · 3 salles de bain",
+   desc:"Un gîte à la ferme en pierres, poutres et pavés. <strong>Piscine intérieure chauffée à 30° toute l'année et jacuzzi privé</strong> — avec Le Moulin, c'est la seule vraie baignade de la sélection en plein hiver. Cheminée à bois, salle de jeux pour enfants, aire de jeux extérieure, ping-pong. À l'est, du côté de Provins et des caves de Champagne.",
+   tags:[["Piscine intérieure 30° · toute l'année",'spa'],['Jacuzzi privé','spa'],['Cheminée bois','hot'],['Salle de jeux enfants',''],['Aire de jeux','']],
+   flag:"Seulement 8 lits annoncés pour 7 chambres, et 3 salles de bain. À faire préciser avant tout : c'est le point faible." },
+
+ { id:'boislandry', n:5, name:"La Grande Maison du Bois Landry", src:'airbnb',
+   url:"https://www.airbnb.fr/rooms/656271025725751282?check_in=2026-12-30&check_out=2027-01-02&adults=9&children=6&infants=1",
+   commune:"Champrond-en-Gâtine (28)", km:135, lat:48.40, lng:1.10, rating:"4,97",
+   price:"3 312 €", per:"123 € / adulte / nuit", sort:3312, band:1,
+   extra:'yes', extraTxt:"Piscine intérieure privée chauffée, disponible toute l'année.",
+   rooms:"7 chambres · 14 lits · 7 salles de bain",
+   desc:"Piscine intérieure chauffée toute l'année, cheminée ou poêle à bois, chauffage central. <strong>Sept salles de bain pour seize personnes</strong> — c'est la seule de la sélection où le matin du 1<sup>er</sup> janvier ne sera pas un embouteillage.",
+   tags:[["Piscine intérieure chauffée",'spa'],['Cheminée bois','hot'],['Chauffage central',''],['7 salles de bain','']],
+   flag:"Le détail chambre par chambre n'est toujours pas publié. À demander à l'hôte.",
+   prev:"C'est la piscine qui joue beaucoup. Les couchages sont peut-être un peu juste" },
+
+ { id:'belvaudiere', n:6, name:"Domaine de la Belvaudière", src:'airbnb',
+   url:"https://www.airbnb.fr/rooms/857799814932527229?check_in=2026-12-30&check_out=2027-01-02&adults=9&children=6&infants=1",
+   commune:"Saint-Pavace (72)", km:229, lat:48.03, lng:0.22, rating:"5,0",
+   price:"4 160 €", per:"154 € / adulte / nuit", sort:4160, band:3,
+   extra:'part', extraTxt:"Jacuzzi, et piscine chauffée sous abri amovible — l'abri rend l'hiver possible, mais l'annonce ne le garantit pas.",
+   rooms:"11 chambres · 8 salles de bain",
+   desc:"<strong>Onze chambres et huit salles de bain</strong> : la question du couchage ne se pose tout simplement pas, et il reste de la place pour la famille d'Avignon. Jacuzzi, cheminée à bois, chauffage central, billard, ping-pong, aire de jeux extérieure. Aux portes du Mans.",
+   tags:[['Jacuzzi','spa'],['Piscine chauffée sous abri','spa'],['Cheminée bois','hot'],['11 chambres',''],['Billard','']],
+   flag:"Confirmer que la piscine est bien ouverte fin décembre avant de se décider dessus." },
+
+ { id:'annayairbnb', drop:true, n:7, name:"La maison au jacuzzi d'Annay", src:'airbnb',
+   url:"https://www.airbnb.fr/rooms/34890579?check_in=2026-12-30&check_out=2027-01-02&adults=9&children=6&infants=1",
+   commune:"Annay-sur-Serein (89)", km:216, lat:47.775, lng:3.905, rating:"4,83",
+   price:"3 079 €", per:"114 € / adulte / nuit", sort:3079, band:2,
+   extra:'yes', extraTxt:"Grand jacuzzi chauffé pour 8 à 10 personnes — assez large pour y tenir tous les adultes à la fois.",
+   rooms:"300 m² · 6 à 7 chambres · 11 lits · 2 salles de bain + WC\n1 ch. au RDC sur le jardin (lit double, WC et lavabo en suite)\n1 ch. à l'étage intermédiaire (lit double + lit enfant)\n3 ch. au 1er (2 lits doubles, 3 lits simples) · 1 ch. en mezzanine par échelle (lit double)",
+   desc:"Même village que le Moulin, autre maison. <strong>Cinq lits doubles</strong>, un grand jacuzzi chauffé, une cheminée, et surtout l'équipement bébé complet fourni : <strong>lit à barreaux, lit parapluie, chaise haute et jeux d'enfants</strong>. Salle de jeux en mezzanine. À vingt minutes de Noyers-sur-Serein.",
+   tags:[['Jacuzzi chauffé 8-10 pers.','spa'],['Cheminée','hot'],['Lit bébé + chaise haute',''],['Salle de jeux','']],
+   flag:"Deux salles de bain seulement, et une chambre accessible par échelle." },
+
+ { id:'beaugency', n:8, name:"Le gîte sauna et balnéo", src:'gdc',
+   url:"https://www.gensdeconfiance.com/fr/annonce/3afba1ba-5da0-40e9-be69-deff6e497fcd",
+   commune:"Cravant, près de Beaugency (45)", km:163, lat:47.80, lng:1.58, rating:null,
+   price:"2 272 €", per:"84 € / adulte / nuit", sort:2272, band:2, was:"annoncé ~1 800 €",
+   train:"Gare de Beaugency à 10 minutes",
+   extra:'part', extraTxt:"Sauna, bain balnéo et salle de yoga : utilisables en décembre. La piscine chauffée, elle, est extérieure et ouverte de mai à septembre — tu avais raison.",
+   rooms:"Maison principale 200 m² · 6 chambres · 3 salles de bain\nCh. 1 : lit 160 + lit bébé · Ch. 2, 3, 4 : lit 160\nCh. 5 : 3 lits simples + 1 lit superposé · Ch. 6 (en enfilade de la 5) : 2 lits simples",
+   desc:"Refait à neuf en 2026 et pensé pour le bien-être : <strong>sauna, bain balnéo dans l'une des trois salles de bain, salle de yoga</strong>. Côté enfants, baby-foot, ping-pong, trampoline et jeux vidéo sur écran XXL. Les chambres 5 et 6 en enfilade font un vrai coin enfants. Leclerc drive et commerces à 10 minutes.",
+   tags:[['Sauna','spa'],['Bain balnéo','spa'],['Salle de yoga','spa'],['Trampoline',''],['Babyfoot','']],
+   flag:"Quatre lits doubles seulement : un des trois solos devra prendre une chambre enfants. Et c'est du neuf, pas de l'ancien.",
+   prev:"Why not. Piscine extérieure ouverte de mai à septembre, attention !" },
+
+ { id:'montigny', drop:true, n:9, name:"La maison de Montigny", src:'airbnb',
+   url:"https://www.airbnb.fr/rooms/31345595?check_in=2026-12-30&check_out=2027-01-02&adults=9&children=6&infants=1",
+   commune:"Montigny-le-Chartif (28)", km:136, lat:48.30, lng:1.13, rating:"4,85",
+   price:"2 579 €", per:"96 € / adulte / nuit", sort:2579, band:1,
+   extra:'part', extraTxt:"Jacuzzi privé, utilisable toute l'année. La piscine est couverte et chauffée mais ouverte de mai à septembre seulement.",
+   rooms:"8 chambres · 9 lits\nCh. 4 et 5 : lit double + salle de bain privative avec baignoire\nCh. 7 : lit queen 160 · Ch. 8 : lit double en mezzanine ouverte sur la salle à manger",
+   desc:"Deux bâtiments côte à côte en « L » autour d'un saule. <strong>Huit chambres</strong> — le plus grand nombre de pièces séparées sous 2 600 € — dont deux avec salle de bain privative. Jacuzzi privé, ping-pong, jeux de société.",
+   tags:[['Jacuzzi privé','spa'],['8 chambres',''],['2 sdb privatives',''],['Ping-pong','']],
+   flag:"Peu de salles de bain annoncées, et la chambre 8 est une mezzanine ouverte sur la salle à manger — pas idéale pour un couple." },
+
+ { id:'favril', n:10, name:"La chaumière du Favril", src:'gdc',
+   url:"https://www.gensdeconfiance.com/fr/annonce/5b1fb2bc06de0",
+   commune:"Le Favril (28)", km:122, lat:48.36, lng:0.93, rating:"5,0",
+   price:"2 688 €", per:"100 € / adulte / nuit", sort:2688, band:1, was:"annoncé ~2 250 €",
+   extra:'none', extraTxt:"Aucun sauna ni jacuzzi dans le texte de l'annonce — je l'ai relue en entier. La piscine n'est pas chauffée.",
+   rooms:"9 chambres · 17 à 18 couchages\nMaison principale : 3 chambres, salon-salle à manger avec poêle et babyfoot\nMaison d'amis : 6 chambres, 1 bureau, 2 salles de bain",
+   desc:"Aux portes du Perche, entourée de champs, à trente minutes de Chartres. Neuf chambres sur deux maisons : c'est la configuration la plus confortable de la sélection, et <strong>le bois de cheminée est fourni</strong>. Capacité 18.",
+   tags:[['Cheminées + poêle','hot'],['Bois fourni',''],['Babyfoot',''],['Très grand jardin','']],
+   flag:"Ton « s'il y avait un extra ce serait 5 étoiles » reste sans réponse : il n'y en a pas.",
+   prev:"Sympa. Ça dit 2 642 € sur le site quand tu rentres les dates. S'il y avait un extra (sauna ou équivalent) ça serait potentiellement 5 étoiles. Je me demande juste si le salon est assez grand pour les kids pour jouer mais c'est ok" },
+
+ { id:'annay', n:11, name:"Le Moulin d'Annay-sur-Serein", src:'gdc',
+   url:"https://www.gensdeconfiance.com/fr/annonce/magnifique-moulin-a-eau-completement-restaure-jacuzzi-et-riviere-6c6175a",
+   commune:"Annay-sur-Serein (89)", km:216, lat:47.77, lng:3.90, rating:"5,0",
+   price:"2 665 €", per:"99 € / adulte / nuit", sort:2665, band:2, was:"annoncé ~1 950 €",
+   extra:'yes', extraTxt:"Jacuzzi, utilisable toute l'année. Pas de sauna, et pas de cheminée mentionnée dans le texte non plus.",
+   rooms:"7 chambres · 17 voyageurs · 2 salles de bain · 3 WC",
+   desc:"Moulin à eau du 18<sup>e</sup> entièrement restauré : poutres apparentes, pierres de Bourgogne, grand salon aux immenses baies vitrées, cuisine haut de gamme. Cinq chambres à lit double, une chambre à trois lits simples, deux lits bébé fournis. Quinze minutes de Chablis, vingt de Noyers-sur-Serein. <strong>La même maison est aussi sur Airbnb, à 3 079 € — soit 414 € de plus pour exactement le même séjour.</strong>",
+   tags:[['Jacuzzi','spa'],['5 lits doubles',''],['Bord de rivière',''],['Chambre au RDC','']],
+   flag:"Ton point sur la rivière au pied de la maison avec un nourrisson tient toujours. Réserver côté Gens de Confiance, l'annonce Airbnb du même bien est plus chère.",
+   prev:"Pas mal. Point bonus pour le jacuzzi toute l'année, point malus pour la rivière qui peut être un no go pour nourrisson. Attention ! Avec les dates c'est 2 650 €" },
+
+ { id:'moriers', n:12, name:"Grande Maison de Campagne 4★", src:'airbnb',
+   url:"https://www.airbnb.fr/rooms/1247748044135019066?check_in=2026-12-30&check_out=2027-01-02&adults=9&children=6&infants=1",
+   commune:"Moriers (28)", km:123, lat:48.15, lng:1.34, rating:"5,0",
+   price:"3 684 €", per:"136 € / adulte / nuit", sort:3684, band:1,
+   extra:'none', extraTxt:"Pas d'équipement bien-être. Salle de jeux enfants et ping-pong seulement.",
+   rooms:"6 chambres + dortoir · 11 lits · 3 salles de bain\nCh. 1 (160, PMR, douche privative) · Ch. 2 (160, douche privative) · Ch. 3 (160)\nCh. 4 (2×80 jumelables) · Ch. 5 (160) · Ch. 6 (2 lits simples)\nDortoir « Cabane » en mezzanine : 3 lits simples 90×200",
+   desc:"Correction : tu avais raison, il y a bien un <strong>dortoir « Cabane » de 3 lits simples en mezzanine</strong> au-dessus des six chambres. Ça règle exactement le dortoir de trois que tu cherchais. Chambres toutes différentes, décorées une à une, salle de jeux pour enfants, cheminée.",
+   tags:[['Cheminée','hot'],['Dortoir 3 lits',''],['Salle de jeux enfants',''],['Ping-pong','']],
+   flag:"Reste 3 salles de bain et une capacité totale de 15 : aucune marge.",
+   prev:"Sympa, un peu juste niveau couchages, il y a un « espace dortoir » pour 3 solos aussi" },
+
+ { id:'cinqmars', n:13, name:"La maison de la Loire", src:'gdc',
+   url:"https://www.gensdeconfiance.com/fr/annonce/loue-maison-de-la-loire-22-couchages-cinq-mars-la-pile-37",
+   commune:"Cinq-Mars-la-Pile (37)", km:273, lat:47.35, lng:0.45, rating:"5,0",
+   price:"3 932 €", per:"146 € / adulte / nuit", sort:3932, band:3,
+   extra:'part', extraTxt:"Sauna et jacuzzi présents, mais facturés en supplément : 120 €/jour le sauna, 70 €/jour le jacuzzi, 250 €/jour le jacuzzi luxe.",
+   rooms:"9 chambres · 22 voyageurs, troglodytes comprises",
+   desc:"Ping-pong, badminton, babyfoot, fléchettes, pétanque, très grand brasero et douze vélos. Beaucoup de matière pour occuper six enfants — mais l'essentiel des équipements bien-être se paie à la journée, en plus du loyer.",
+   tags:[['Sauna 120 €/j','spa'],['Jacuzzi 70 €/j','spa'],['Brasero',''],['12 vélos',''],['Babyfoot','']],
+   flag:"La fiche annonce bien 9 chambres et 22 voyageurs — mais trois sont des troglodytes à 120 € la nuit, et le sauna comme le jacuzzi se paient à la journée." },
+
+ { id:'longny', n:14, name:"Maison familiale dans le Perche", src:'gdc',
+   url:"https://www.gensdeconfiance.com/fr/annonce/location-maison-familiale-de-vacances-dans-le-perche-piscine-tennis-15-couchages-56659ed",
+   commune:"Longny-les-Villages (61)", km:152, lat:48.53, lng:0.75, rating:"5,0",
+   price:"2 158 €", per:"80 € / adulte / nuit", sort:2158, band:2, was:"annoncé ~1 050 €",
+   extra:'none', extraTxt:"Aucun équipement bien-être. Tennis, et une piscine chauffée seulement en saison.",
+   rooms:"2 bâtiments (3 + 4 chambres) · 15 couchages\nMaison principale : 2 lits doubles + 1 chambre à 3 lits simples",
+   desc:"Le tarif réel du réveillon est le double de ce que j'avais annoncé — c'était bien un prix hors saison. Reste trois hectares en bordure de forêt, un tennis, et la gare de L'Aigle à quinze minutes pour ceux qui ne veulent pas conduire.",
+   tags:[['Tennis',''],['Gare à 15 min',''],['3 ha en lisière de forêt','']],
+   flag:"Pas d'extra, et pas de cheminée mentionnée. C'est la moins chère, et ça se sent.",
+   prev:"Rien de trop spécifique à remonter…" },
+
+ { id:'fertegaucher', n:15, name:"La maison de La Ferté-Gaucher", src:'airbnb', star:true,
+   url:"https://www.airbnb.fr/rooms/1603696577945367676?check_in=2026-12-30&check_out=2027-01-02&adults=9&children=6&infants=1",
+   commune:"La Ferté-Gaucher (77)", km:88, lat:48.78, lng:3.31, rating:"4,77",
+   price:"3 975 €", per:"147 € / adulte / nuit", sort:3975, band:1,
+   extra:'yes', extraTxt:"Sauna privé, jacuzzi privé disponible toute l'année, et une salle de sport équipée (haltères, vélo, tapis de course). Piscine chauffée mais saisonnière.",
+   rooms:"7 chambres · 10 lits · 3 salles de bain",
+   desc:"La plus proche de Paris, et la seule sous 1h30 à cumuler <strong>sauna, jacuzzi ouvert toute l'année et salle de sport</strong>. La configuration tombe juste : une suite parentale en 180, trois chambres en 160, deux en 140 — six chambres à lit double pour trois couples et trois solos — et une chambre à quatre lits superposés pour les enfants.",
+   tags:[['Sauna privé','spa'],["Jacuzzi · toute l'année",'spa'],['Salle de sport','spa'],['Piscine chauffée en saison',''],['Cheminée','hot'],['Ping-pong','']],
+   flag:"Trois salles de bain pour seize personnes, et la note la plus basse de la sélection à 4,77." },
+
+ { id:'sylvains', n:16, name:"La chaumière du Val d'Iton", src:'gdc',
+   url:"https://www.gensdeconfiance.com/fr/annonce/loue-chaumiere-en-vallet-d-iton-27-7-couchages",
+   commune:"Sylvains-lès-Moulins (27)", km:118, lat:48.92, lng:1.06, rating:"5,0",
+   price:"2 044 €", per:"76 € / adulte / nuit", sort:2044, band:1,
+   train:"Évreux à 1h de Paris Saint-Lazare, Verneuil-sur-Avre à 1h20 de Montparnasse",
+   extra:'yes', extraTxt:"Bain nordique pour 6 à 8 personnes, utilisable en décembre.",
+   rooms:"2 bâtiments · 7 chambres · 15 voyageurs · 3 salles de bain",
+   desc:"Une chaumière normande et une maison traditionnelle sur le même terrain, en vallée d'Iton. <strong>Le meilleur rapport prix-équipement de la sélection</strong> : un bain nordique pour 2 037 €, note parfaite. C'est aussi la mieux desservie en train.",
+   tags:[['Bain nordique 6-8 pers.','spa'],['Deux gares à 1h de Paris',''],['Chaumière normande','']],
+   flag:"Plafonnée à 15 voyageurs alors que vous êtes 15 plus un bébé — à faire confirmer par le propriétaire. Et plein ouest de Paris : la plus mauvaise position pour ceux qui montent de Toulouse." },
+
+ { id:'chaumont', n:17, name:"Le domaine de 1896 en Sologne", src:'gdc',
+   url:"https://www.gensdeconfiance.com/fr/annonce/loue-domaine-privatise-de-1896-en-sologne-22-couchages",
+   commune:"Chaumont-sur-Tharonne (41)", km:183, lat:47.58, lng:1.88, rating:null,
+   price:"4 239 €", per:"157 € / adulte / nuit", sort:4239, band:2,
+   extra:'yes', extraTxt:"Jacuzzi et cheminée, confirmés dans le texte de l'annonce.",
+   rooms:"Domaine privatisé · 22 couchages",
+   desc:"Un domaine de 1896 privatisé au cœur de la Sologne, vingt-deux couchages. De la place pour la famille d'Avignon sans discussion, et un jacuzzi.",
+   tags:[['Jacuzzi','spa'],['Cheminée','hot'],['Domaine privatisé',''],['22 couchages','']],
+   flag:"Le détail des chambres n'est pas publié et il n'y a aucun avis. Deux inconnues pour la maison la plus chère de sa catégorie." },
+
+ { id:'stmartin', n:18, name:"Le moulin de Saint-Martin", src:'gdc',
+   url:"https://www.gensdeconfiance.com/fr/annonce/moulin-de-charme-au-coeur-de-la-nature-piscine-et-jacuzzi",
+   commune:"Saint-Martin-des-Champs (18)", km:242, lat:47.16, lng:2.93, rating:null,
+   price:"3 399 €", per:"126 € / adulte / nuit", sort:3399, band:3,
+   extra:'yes', extraTxt:"Piscine et jacuzzi, cités parmi les activités du domaine. Saisonnalité de la piscine à confirmer.",
+   rooms:"Domaine de deux maisons · 17 couchages\nLe moulin : salon avec cheminée, bibliothèque, cuisine, 4 chambres, 2 salles de bain — 10 personnes\nSeconde maison : le complément, non détaillé",
+   desc:"Un moulin de charme avec salon à cheminée et bibliothèque, sur un domaine en pleine nature entre Sancerre et la Loire. Jacuzzi, ping-pong, promenades en forêt, canoë sur la Loire à la belle saison.",
+   tags:[['Jacuzzi','spa'],['Piscine',''],['Cheminée','hot'],['Bibliothèque',''],['Ping-pong','']],
+   flag:"Deux maisons, aucun avis, et le second bâtiment non détaillé." },
+
+ { id:'pasdejeu', n:19, name:"La villa de Pas-de-Jeu", src:'airbnb',
+   url:"https://www.airbnb.fr/rooms/1101896436539549396?check_in=2026-12-30&check_out=2027-01-02&adults=9&children=6&infants=1",
+   commune:"Pas-de-Jeu (79)", km:345, lat:46.94, lng:0.11, rating:"4,97",
+   price:"4 318 €", per:"160 € / adulte / nuit", sort:4318, band:4,
+   extra:'yes', extraTxt:"Sauna privé et jacuzzi privé disponible toute l'année, plus une piscine.",
+   rooms:"8 chambres · 8 lits · 6 salles de bain + WC",
+   desc:"Huit chambres et <strong>six salles de bain</strong> : la question du couchage et celle de la douche du matin sont réglées ensemble. Sauna et jacuzzi privatifs, salle de jeux pour enfants. Aux confins du Poitou, dans les Deux-Sèvres.",
+   tags:[['Sauna privé','spa'],["Jacuzzi · toute l'année",'spa'],['Piscine',''],['6 salles de bain',''],['Salle de jeux enfants','']],
+   flag:"345 km : c'est la limite des 4h que tu as fixée. En revanche c'est la seule de la liste qui rapproche vraiment la famille de Toulouse." }
+];
+
+/* ---- couchages : d = lit double/queen, s = lit simple, u = lits superposés,
+       c = canapé-lit, b = lit bébé. Absent = non publié par l'annonce. ---- */
+var BEDS = {
+ chateaulandon:{r:[
+   {n:"Chambre 1",b:[["d",1]],x:"sdb attenante"},
+   {n:"Chambre 2",b:[["s",2]]},
+   {n:"Chambre 3",b:[["d",1]]},
+   {n:"Chambre 4",b:[["d",1]]},
+   {n:"Chambre 5",b:[["d",1]]},
+   {n:"Chambre 6",b:[["d",1]]},
+   {n:"Chambre 7",b:[["d",1],["s",1]],x:"sdb attenante"}],
+   plus:"Annexe indépendante en supplément → jusqu'à 22 couchages"},
+
+ lorris:{r:[
+   {g:"La maison",n:"Chambre 1",b:[],x:"rez-de-chaussée, salle d'eau + WC"},
+   {g:"La maison",n:"Chambre 2",b:[],x:"étage"},
+   {g:"La maison",n:"Chambre 3",b:[],x:"étage"},
+   {g:"La maison",n:"Chambre 4",b:[],x:"étage"},
+   {g:"La maison",n:"Chambre 5",b:[],x:"étage"},
+   {g:"La grange",n:"Chambre 6",b:[],x:"étage"},
+   {g:"La grange",n:"Chambre 7",b:[],x:"étage"},
+   {g:"La grange",n:"Chambre 8",b:[],x:"étage"}],
+   gx:{"La maison":"cuisine, séjour avec cheminée, bibliothèque, salon TV · 2 salles d'eau",
+       "La grange":"cuisine, sauna, salle de sport · salle de jeux à l'étage · 1 salle de bain"},
+   plus:"Huit chambres confirmées, mais l'annonce ne détaille pas les lits — à demander"},
+
+ gueleger:{r:[
+   {n:"Chambre 1",b:[["d",1]]},{n:"Chambre 2",b:[["d",1]]},{n:"Chambre 3",b:[["d",1]]},
+   {n:"Chambre 4",b:[["d",1]]},{n:"Chambre 5",b:[["d",1]]},{n:"Chambre 6",b:[["d",1]]},
+   {n:"Chambre 7",b:[["s",1],["u",1]]}],
+   plus:"Les six premières sont en lit Queen Size"},
+
+ esternay:{r:[],plus:"7 chambres et 3 salles de bain, mais seulement 8 lits annoncés et aucun détail publié. C'est le point à faire préciser avant tout."},
+
+ boislandry:{r:[],plus:"7 chambres, 14 lits et 7 salles de bain — la répartition n'est pas publiée."},
+
+ belvaudiere:{r:[],plus:"11 chambres et 8 salles de bain, sans détail des lits dans l'annonce."},
+
+ annayairbnb:{r:[
+   {n:"Chambre 1 · RDC",b:[["d",1]],x:"WC et lavabo en suite"},
+   {n:"Étage intermédiaire",b:[["d",1],["s",1]]},
+   {n:"1ᵉʳ étage",b:[["d",1]]},{n:"1ᵉʳ étage",b:[["d",1]]},
+   {n:"1ᵉʳ étage",b:[["s",3]]},
+   {n:"Mezzanine",b:[["d",1]],x:"accès par échelle"}],
+   plus:"Lit à barreaux, lit parapluie et chaise haute fournis"},
+
+ beaugency:{r:[
+   {n:"Chambre 1",b:[["d",1],["b",1]]},
+   {n:"Chambre 2",b:[["d",1]]},{n:"Chambre 3",b:[["d",1]]},{n:"Chambre 4",b:[["d",1]]},
+   {n:"Chambre 5",b:[["s",3],["u",1]]},
+   {n:"Chambre 6",b:[["s",2]],x:"en enfilade de la 5"}],
+   plus:"Lits doubles en 160. Une des trois salles de bain a le bain balnéo."},
+
+ montigny:{r:[
+   {n:"Chambre 4",b:[["d",1]],x:"sdb privative, baignoire"},
+   {n:"Chambre 5",b:[["d",1]],x:"sdb privative, baignoire"},
+   {n:"Chambre 7",b:[["d",1]],x:"queen 160"},
+   {n:"Chambre 8",b:[["d",1]],x:"mezzanine ouverte sur la salle à manger"},
+   {n:"Chambres 1, 2, 3, 6",b:[]}],
+   plus:"Huit chambres au total, quatre détaillées seulement — et l'annonce ne dit pas laquelle est dans quel bâtiment"},
+
+ favril:{r:[
+   {g:"La chaumière",n:"Chambre 1",b:[]},{g:"La chaumière",n:"Chambre 2",b:[]},
+   {g:"La chaumière",n:"Chambre 3",b:[],x:"1 salle de bain"},
+   {g:"La maison d'amis",n:"Chambre 4",b:[]},{g:"La maison d'amis",n:"Chambre 5",b:[]},
+   {g:"La maison d'amis",n:"Chambre 6",b:[]},{g:"La maison d'amis",n:"Chambre 7",b:[]},
+   {g:"La maison d'amis",n:"Chambre 8",b:[]},
+   {g:"La maison d'amis",n:"Chambre 9",b:[],x:"2 salles de bain, 1 bureau"}],
+   gx:{"La chaumière":"salon-salle à manger avec poêle et babyfoot, grande cuisine",
+       "La maison d'amis":"6 chambres, 1 bureau, 2 salles de bain"},
+   plus:"Neuf chambres pour 17 à 18 couchages — répartition des lits à demander"},
+
+ annay:{r:[
+   {n:"Chambre · RDC",b:[["d",1]]},
+   {n:"Chambre",b:[["d",1]]},{n:"Chambre",b:[["d",1]]},
+   {n:"Chambre",b:[["d",1]]},{n:"Chambre",b:[["d",1]]},
+   {n:"Chambre",b:[["s",4]]},
+   {n:"Mezzanines",b:[["c",2]],x:"deux canapés-lit"}],
+   plus:"17 couchages annoncés : 5 lits doubles, 4 simples, 2 canapés-lit. Attribution par pièce à confirmer."},
+
+ moriers:{r:[
+   {n:"Chambre 1",b:[["d",1]],x:"PMR, douche privative"},
+   {n:"Chambre 2",b:[["d",1]],x:"douche privative"},
+   {n:"Chambre 3",b:[["d",1]]},
+   {n:"Chambre 4",b:[["s",2]],x:"2×80 jumelables en 160"},
+   {n:"Chambre 5",b:[["d",1]]},
+   {n:"Chambre 6",b:[["s",2]]},
+   {n:"Dortoir « Cabane »",b:[["s",3]],x:"mezzanine"}],
+   plus:"Lits doubles en 160"},
+
+ cinqmars:{r:[
+   {n:"Chambre 1",b:[]},{n:"Chambre 2",b:[]},{n:"Chambre 3",b:[]},
+   {n:"Chambre 4",b:[]},{n:"Chambre 5",b:[]},
+   {n:"Dortoir",b:[["s",5]]}],
+   plus:"3 chambres troglodytes en plus, facturées 120 € la nuit chacune"},
+
+ longny:{r:[
+   {g:"La maison principale",n:"Chambre 1",b:[["d",1]]},
+   {g:"La maison principale",n:"Chambre 2",b:[["d",1]]},
+   {g:"La maison principale",n:"Chambre 3",b:[["s",3]]},
+   {g:"Le second bâtiment",n:"Chambre 4",b:[]},{g:"Le second bâtiment",n:"Chambre 5",b:[]},
+   {g:"Le second bâtiment",n:"Chambre 6",b:[]},{g:"Le second bâtiment",n:"Chambre 7",b:[]}],
+   gx:{"Le second bâtiment":"non détaillé dans l'annonce"},
+   plus:"Seule la maison principale est détaillée dans l'annonce"},
+ fertegaucher:{r:[
+   {n:"Suite parentale",b:[["d",1]],x:"lit 180, salle de bain privative"},
+   {n:"Chambre 2",b:[["d",1]],x:"lit 160"},
+   {n:"Chambre 3",b:[["d",1]],x:"lit 160"},
+   {n:"Chambre 4",b:[["d",1]],x:"lit 160"},
+   {n:"Chambre 5",b:[["d",1]],x:"lit 140"},
+   {n:"Chambre 6",b:[["d",1]],x:"lit 140"},
+   {n:"Chambre enfants",b:[["u",4]],x:"quatre lits superposés"}],
+   plus:"Six chambres à lit double : trois couples, trois solos. Mais trois salles de bain seulement."},
+
+ sylvains:{r:[
+   {g:"La chaumière",n:"Chambre 1",b:[]},{g:"La chaumière",n:"Chambre 2",b:[]},
+   {g:"La chaumière",n:"Chambre 3",b:[],x:"1 salle de bain"},
+   {g:"La maison normande",n:"Chambre 4",b:[]},{g:"La maison normande",n:"Chambre 5",b:[]},
+   {g:"La maison normande",n:"Chambre 6",b:[]},
+   {g:"La maison normande",n:"Chambre 7",b:[],x:"2 salles de bain"}],
+   gx:{"La chaumière":"110 m2, 7 couchages","La maison normande":"170 m2, 9 couchages"},
+   plus:"16 couchages au total, mais l'annonce ne donne pas le type de lit"},
+
+ chaumont:{r:[],plus:"Domaine privatise de 22 couchages, sans detail des chambres dans l'annonce"},
+
+ stmartin:{r:[
+   {g:"Le moulin",n:"Chambre 1",b:[]},{g:"Le moulin",n:"Chambre 2",b:[]},
+   {g:"Le moulin",n:"Chambre 3",b:[]},{g:"Le moulin",n:"Chambre 4",b:[],x:"2 salles de bain"},
+   {g:"La seconde maison",n:"Chambres 5 et suivantes",b:[]}],
+   gx:{"Le moulin":"salon avec cheminee, bibliotheque, cuisine - 10 personnes",
+       "La seconde maison":"non detaillee dans l'annonce"},
+   plus:"17 couchages annonces au total"},
+
+ pasdejeu:{r:[],plus:"8 chambres et 6 salles de bain, sans detail des lits dans l'annonce"}
+};
+
+/* ---- bâtiments + ton retour du tour 2 ---- */
+
+/* --- couchages relevés dans « Où vous dormirez » sur Airbnb, et comptes de
+       chambres relevés sur les fiches Gens de Confiance --- */
+var BEDS2 = {
+ chateaulandon:{r:[
+   {n:"Chambre 1",b:[["d",1],["s",1]]},
+   {n:"Chambre 2",b:[["s",3]]},
+   {n:"Chambre 3",b:[["d",1]]},
+   {n:"Chambre 4",b:[["d",1]]},
+   {n:"Chambre 5",b:[["d",1]]},
+   {n:"Chambre 6",b:[["d",1],["s",1]]},
+   {n:"Chambre 7",b:[["d",1],["s",2]],x:"lit queen"}],
+   plus:"Relevé sur « Où vous dormirez ». La chambre 2, à trois lits simples, fait le dortoir enfants. Annexe en supplément."},
+
+ esternay:{r:[
+   {n:"Chambre 1",b:[["d",1]]},
+   {n:"Chambre 2",b:[["d",1]]},
+   {n:"Chambre 3",b:[["d",2]]},
+   {n:"Chambre 4",b:[["d",1]]},
+   {n:"Chambre 5",b:[["d",1]]},
+   {n:"Chambre 6",b:[["d",1]]},
+   {n:"Salon",b:[["c",1]],x:"canapé convertible"}],
+   plus:"Sept lits doubles sur six chambres. Le point faible reste les trois salles de bain."},
+
+ boislandry:{r:[
+   {n:"Chambre 1",b:[["d",1]]},
+   {n:"Chambre 2",b:[["d",2],["s",1]]},
+   {n:"Chambre 3",b:[["d",1],["u",1]]},
+   {n:"Chambre 4",b:[["s",2]]},
+   {n:"Chambre 5",b:[["s",2]]},
+   {n:"Chambre 6",b:[["d",1]]},
+   {n:"Chambre 7",b:[["d",1],["s",1]]}],
+   plus:"Cinq chambres à lit double, deux chambres enfants, sept salles de bain."},
+
+ belvaudiere:{r:[
+   {n:"Chambre 1",b:[["d",1]],x:"lit king size"},
+   {n:"Chambre 2",b:[["d",1]]},
+   {n:"Chambre 3",b:[["d",1]]}],
+   plus:"L'annonce dit 11 chambres mais n'en détaille que trois dans « Où vous dormirez ». Écart à faire expliquer."},
+
+ pasdejeu:{r:[
+   {n:"Chambre 1",b:[["d",1]],x:"queen"},{n:"Chambre 2",b:[["d",1]],x:"queen"},
+   {n:"Chambre 3",b:[["d",1]],x:"queen"},{n:"Chambre 4",b:[["d",1]],x:"queen"},
+   {n:"Chambre 5",b:[["d",1]],x:"queen"},{n:"Chambre 6",b:[["d",1]],x:"queen"},
+   {n:"Chambre 7",b:[["d",1]],x:"queen"},{n:"Chambre 8",b:[["s",1]]}],
+   plus:"Sept chambres en lit queen et six salles de bain : la meilleure configuration de toute la sélection."},
+
+ fertegaucher:{r:[
+   {n:"Chambre 1",b:[["d",1]],x:"lit king size"},
+   {n:"Chambre 2",b:[["d",1]]},
+   {n:"Chambre 3",b:[["u",2]],x:"chambre enfants"},
+   {n:"Chambre 4",b:[["d",1]],x:"queen"},
+   {n:"Chambre 5",b:[["d",1]]},
+   {n:"Chambre 6",b:[["d",1]],x:"queen"},
+   {n:"Chambre 7",b:[["d",1]],x:"queen"},
+   {n:"Salon",b:[["c",1]]}],
+   plus:"Six chambres à lit double et une chambre à deux lits superposés. Trois salles de bain."},
+
+ gueleger:{r:[
+   {n:"Chambre 1",b:[["d",1]]},
+   {n:"Chambre 2",b:[["d",1]],x:"queen"},
+   {n:"Chambre 3",b:[["d",1]],x:"queen"},
+   {n:"Chambre 4",b:[["d",1]],x:"queen"},
+   {n:"Chambre 5",b:[["d",1],["b",1]],x:"queen + lit bébé"},
+   {n:"Chambre 6",b:[["s",3]],x:"le dortoir de trois"},
+   {n:"Chambre 7",b:[["d",1]],x:"queen"}],
+   plus:"Six chambres à lit double, un dortoir de trois lits simples, un lit bébé fourni. C'est le brief, à la lettre."},
+
+ annay:{r:[
+   {n:"Chambre 1",b:[["s",3]]},
+   {n:"Chambre 2",b:[["d",1]]},
+   {n:"Chambre 3",b:[["d",1]]},
+   {n:"Chambre 4",b:[["d",1],["b",1]]},
+   {n:"Chambre 5",b:[["d",1],["b",1]]},
+   {n:"Chambre 6",b:[["d",1],["s",1]]},
+   {n:"Chambre 7",b:[["c",2]],x:"mezzanine"}],
+   plus:"Relevé sur l'annonce Airbnb de la même maison. Deux lits bébé fournis."},
+
+ cinqmars:{r:[
+   {n:"Chambre 1",b:[]},{n:"Chambre 2",b:[]},{n:"Chambre 3",b:[]},
+   {n:"Chambre 4",b:[]},{n:"Chambre 5",b:[]},
+   {n:"Dortoir",b:[["s",5]]},
+   {n:"Troglodyte 1",b:[],x:"120 €/nuit en supplément"},
+   {n:"Troglodyte 2",b:[],x:"120 €/nuit en supplément"},
+   {n:"Troglodyte 3",b:[],x:"120 €/nuit en supplément"}],
+   plus:"La fiche annonce 9 chambres et 22 voyageurs — les trois troglodytes comprises, facturées en plus."},
+
+ chaumont:{r:Array.from({length:12},function(_,i){return {n:"Chambre "+(i+1),b:[]}}),
+   plus:"La fiche annonce 12 chambres et 22 voyageurs, sans détailler les lits."},
+
+ stmartin:{r:[
+   {g:"Le moulin",n:"Chambre 1",b:[]},{g:"Le moulin",n:"Chambre 2",b:[]},
+   {g:"Le moulin",n:"Chambre 3",b:[]},{g:"Le moulin",n:"Chambre 4",b:[],x:"2 salles de bain"},
+   {g:"La seconde maison",n:"Chambre 5",b:[]},{g:"La seconde maison",n:"Chambre 6",b:[]},
+   {g:"La seconde maison",n:"Chambre 7",b:[]}],
+   gx:{"Le moulin":"salon avec cheminée, bibliothèque, cuisine — 10 personnes",
+       "La seconde maison":"non détaillée dans l'annonce"},
+   plus:"La fiche annonce 7 chambres et 17 voyageurs."},
+
+ sylvains:{r:[
+   {g:"La chaumière",n:"Chambre 1",b:[]},{g:"La chaumière",n:"Chambre 2",b:[]},
+   {g:"La chaumière",n:"Chambre 3",b:[],x:"1 salle de bain"},
+   {g:"La maison normande",n:"Chambre 4",b:[]},{g:"La maison normande",n:"Chambre 5",b:[]},
+   {g:"La maison normande",n:"Chambre 6",b:[]},
+   {g:"La maison normande",n:"Chambre 7",b:[],x:"2 salles de bain"}],
+   gx:{"La chaumière":"110 m², 7 couchages","La maison normande":"170 m², 9 couchages"},
+   plus:"La fiche plafonne à 15 voyageurs — vous êtes 15 plus un bébé. C'est très probablement ce qui affichait « plus disponible »."}
+};
+Object.keys(BEDS2).forEach(function(k){ BEDS[k]=BEDS2[k]; });
+
+var SUPP = {
+ chateaulandon:{bld:"1 maison",bldx:"annexe indépendante en option"},
+ lorris:{bld:"2 bâtiments",bldx:"la maison et la grange attenante",
+   p2:"On garde, mais il faudra des photos en + pour se faire une idée notamment du sauna et de la salle de sport, car niveau charme c'est pas wow",
+   todo:"Photos supplémentaires à demander au propriétaire : sauna, salle de sport, salle de jeux."},
+ gueleger:{bld:"1 maison",bldx:"400 m² d'un seul tenant"},
+ esternay:{bld:"1 maison"},
+ boislandry:{bld:"1 maison"},
+ belvaudiere:{bld:"1 domaine"},
+ annayairbnb:{bld:"1 maison",bldx:"300 m² sur trois niveaux"},
+ beaugency:{bld:"1 maison",bldx:"200 m²",
+   p2:"Je trouve pas mal, le côté sauna et yoga c'est sympa, et le petit four extérieur à bois ça peut être sympa aussi. Pas wow non plus mais on garde"},
+ montigny:{bld:"2 bâtiments",bldx:"côte à côte, en « L » autour d'un saule"},
+ favril:{bld:"2 maisons",bldx:"la chaumière et la maison d'amis",
+   p2:"Sympa, mais 2 maisons, maybe pas idéal"},
+ annay:{bld:"1 maison",bldx:"le moulin, sur trois niveaux",
+   p2:"Why not. Pas archi convaincu, mais bon on garde"},
+ moriers:{bld:"1 maison"},
+ cinqmars:{bld:"1 maison",bldx:"+ 3 chambres troglodytes en supplément",
+   p2:"N'est plus dispo ?",
+   todo:"Vérifié : toujours disponible. L'annonce ressort dans la recherche Gens de Confiance filtrée sur le 30/12 → 02/01."},
+ longny:{bld:"2 bâtiments",bldx:"3 et 4 chambres",
+   p2:"Pas dingue, mais pas cher"},
+ fertegaucher:{bld:"1 maison"},
+ sylvains:{bld:"2 bâtiments",bldx:"la chaumière et la maison normande"},
+ chaumont:{bld:"1 domaine",bldx:"privatisé"},
+ stmartin:{bld:"2 maisons",bldx:"le moulin et une seconde maison"},
+ pasdejeu:{bld:"1 villa",bldx:"« Clos de Joco »",
+   p2:"Tu as les couchages dans « où vous dormirez », tu peux les ajouter (et vérifier pour tous les Airbnb ?) Très chouette en tout cas, et top niveau équipement"},
+ chateaulandon2:{},
+};
+Object.assign(SUPP,{
+ chateaulandon:{bld:"1 maison",bldx:"« Moulin rénové », annexe en option",
+   p2:"5/5 — Très chouette ça. Un peu loin pour les autres mais on like."},
+ esternay:{bld:"1 maison",bldx:"« La Gouyardière »",
+   p2:"5/5 — Hyper chouette."},
+ fertegaucher:{bld:"1 maison",bldx:"« Villa Les Roches »",
+   p2:"5/5 — Top ça."},
+ gueleger:{bld:"1 maison",bldx:"400 m² d'un seul tenant",
+   p2:"5/5 — Très sympa."},
+ boislandry:{bld:"1 maison",
+   p2:"Moins stylé mais moins cher que d'autres avec piscine intérieure."},
+ favril:{bld:"2 maisons",bldx:"la chaumière et la maison d'amis",
+   p2:"Sympa, mais 2 maisons, peut-être pas idéal (et pas d'extra)."},
+ lorris:{bld:"2 bâtiments",bldx:"la maison et la grange attenante",
+   p2:"On garde, mais il faudra des photos en plus du sauna et de la salle de sport : niveau charme c'est pas wow.",
+   todo:"Photos à demander au propriétaire : sauna, salle de sport, salle de jeux."},
+ annay:{bld:"1 maison",bldx:"le moulin, sur trois niveaux",
+   p2:"Why not. Pas archi convaincu, mais on garde."},
+ beaugency:{bld:"1 maison",bldx:"200 m²",
+   p2:"Pas mal, le côté sauna et yoga c'est sympa, le four extérieur à bois aussi. Pas wow non plus mais on garde."},
+ longny:{bld:"2 bâtiments",bldx:"3 et 4 chambres",
+   p2:"Pas dingue, mais pas cher."},
+ belvaudiere:{bld:"1 domaine",
+   p2:"Stylé mais pas d'extra, pas sûr qu'on garde vu le prix."},
+ chaumont:{bld:"1 domaine",bldx:"privatisé, 12 chambres",
+   p2:"Doute sur la disponibilité — vérifié depuis : disponible."},
+ stmartin:{bld:"2 maisons",bldx:"le moulin et une seconde maison",
+   p2:"Doute sur la disponibilité — vérifié depuis : disponible."},
+ cinqmars:{bld:"1 maison",bldx:"+ 3 chambres troglodytes en supplément",
+   p2:"Doute sur la disponibilité — vérifié depuis : disponible.",
+   todo:"Sauna et jacuzzi facturés à la journée : à chiffrer avant de comparer au reste."},
+ sylvains:{bld:"2 bâtiments",bldx:"la chaumière et la maison normande",
+   p2:"Noté comme plus disponible — en réalité la fiche plafonne à 15 voyageurs.",
+   todo:"Demander au propriétaire si le bébé compte dans les 15 voyageurs."}
+});
+
+
+/* Trajets routiers réels, calculés sur le réseau routier (OSRM) : [km, minutes] */
+var ROAD = {
+ chateaulandon:{P:[97,81],L:[388,245],T:[644,410]},
+ lorris:{P:[137,105],L:[412,260],T:[569,382]},
+ gueleger:{P:[258,185],L:[470,299],T:[490,339]},
+ esternay:{P:[100,93],L:[446,297],T:[766,499]},
+ boislandry:{P:[127,103],L:[539,346],T:[657,429]},
+ belvaudiere:{P:[210,144],L:[590,372],T:[688,425]},
+ annay:{P:[198,147],L:[287,187],T:[660,464]},
+ beaugency:{P:[157,119],L:[473,304],T:[578,371]},
+ favril:{P:[142,120],L:[554,363],T:[652,445]},
+ moriers:{P:[127,102],L:[501,327],T:[610,400]},
+ cinqmars:{P:[273,183],L:[502,314],T:[600,369]},
+ longny:{P:[137,129],L:[573,382],T:[691,465]},
+ fertegaucher:{P:[80,73],L:[441,304],T:[748,486]},
+ sylvains:{P:[109,99],L:[565,370],T:[706,473]},
+ chaumont:{P:[181,129],L:[418,267],T:[523,334]},
+ stmartin:{P:[223,151],L:[292,209],T:[565,364]},
+ pasdejeu:{P:[321,232],L:[550,363],T:[536,344]}
+};
+
+var ORIG = [["Paris",48.8566,2.3522],["Lyon",45.7640,4.8357],["Toulouse",43.6047,1.4442]];
+
+var HOUSES = ALL_HOUSES.filter(function(h){return !h.drop});
+ALL_HOUSES.forEach(function(h,i){});
+HOUSES.forEach(function(h,i){h.n=i+1;
+  var m=(ROAD[h.id]||{P:[0,0]}).P[1];
+  h.band = m<105?1 : m<150?2 : m<195?3 : 4;
+});
+
+
+/* Pour les copains : de la plus proche de Paris à la plus lointaine. */
+HOUSES.sort(function(a,b){ return ((ROAD[a.id]||{P:[0,9999]}).P[1]) - ((ROAD[b.id]||{P:[0,9999]}).P[1]); });
+HOUSES.forEach(function(h,i){ h.n=i+1; });
+
+/* ---------------- helpers ---------------- */
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function nl2br(s){ return esc(s).replace(/\n/g,'<br>'); }
+function byId(id){ return HOUSES.filter(function(h){return h.id===id})[0]; }
+function myV(){ return (state.voters[me]||{}); }
+function myVotes(){ var v=myV(); return v.votes||{}; }
+
+var SVGA='fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"';
+var ICON={
+ d:'<svg width="30" height="21" viewBox="0 0 30 21" '+SVGA+'><path d="M2 19v-5M28 19v-5M2 14h26M4 14V9a2 2 0 0 1 2-2h18a2 2 0 0 1 2 2v5"/><path d="M8 7V5.5A1.5 1.5 0 0 1 9.5 4h3A1.5 1.5 0 0 1 14 5.5V7M16 7V5.5A1.5 1.5 0 0 1 17.5 4h3A1.5 1.5 0 0 1 22 5.5V7"/></svg>',
+ s:'<svg width="20" height="21" viewBox="0 0 20 21" '+SVGA+'><path d="M2 19v-5M18 19v-5M2 14h16M4 14V9a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v5"/><path d="M7 7V5.5A1.5 1.5 0 0 1 8.5 4h3A1.5 1.5 0 0 1 13 5.5V7"/></svg>',
+ u:'<svg width="20" height="25" viewBox="0 0 20 25" '+SVGA+'><path d="M3 23V2M17 23V2M3 13h14M3 5h14M5 13v-3h10v3M5 5V3"/><path d="M3 21h14"/></svg>',
+ c:'<svg width="25" height="21" viewBox="0 0 25 21" '+SVGA+'><path d="M4 17v2M21 17v2M3 17h19M3 17v-5a1.8 1.8 0 0 1 3.6 0v1.6h11.8V12a1.8 1.8 0 0 1 3.6 0v5"/><path d="M6.6 11V6a2 2 0 0 1 2-2h7.8a2 2 0 0 1 2 2v5"/></svg>',
+ b:'<svg width="18" height="21" viewBox="0 0 18 21" '+SVGA+'><path d="M2 19V6M16 19V6M2 6h14M6.7 6v11M11.3 6v11M2 17h14"/></svg>'
+};
+var BEDNAME={d:['lit double','lits doubles'],s:['lit simple','lits simples'],
+ u:['lit superposé','lits superposés'],c:['canapé-lit','canapés-lit'],b:['lit bébé','lits bébé']};
+
+function sleepHTML(h){
+  var data=BEDS[h.id];
+  if(!data) return {tally:'',html:''};
+  var rooms=data.r||[], nD=0, known=0;
+  function card(r){
+    var hasD=r.b.some(function(x){return x[0]==='d'});
+    if(hasD) nD++;
+    if(r.b.length) known++;
+    var kind=r.b.length? (hasD?'adult':'kids') : 'unknown';
+    var icons=r.b.map(function(x){var o='';for(var i=0;i<Math.min(x[1],3);i++)o+=ICON[x[0]];return o}).join('');
+    var label=r.b.map(function(x){return x[1]+' '+BEDNAME[x[0]][x[1]>1?1:0]}).join(' · ')||'lits non détaillés';
+    return '<div class="bedcard '+kind+'"><div class="icons">'+(icons||ICON.s.replace('currentColor','var(--line)'))+'</div>'
+      +'<div class="nm">'+esc(r.n)+'</div><div class="bd">'+esc(label)+'</div>'
+      +(r.x?'<div class="xtra">'+esc(r.x)+'</div>':'')+'</div>';
+  }
+  var groups=[];
+  rooms.forEach(function(r){
+    var g=r.g||'', slot=groups.filter(function(x){return x.g===g})[0];
+    if(!slot){slot={g:g,items:[]};groups.push(slot)}
+    slot.items.push(r);
+  });
+  var cards='';
+  if(!rooms.length){
+    cards='<div class="sleep-scroll"><div class="bedcards"><div class="bedcard unknown"><div class="icons">'+ICON.d+'</div>'
+      +'<div class="nm">Non publié</div><div class="bd">L\'annonce ne détaille pas les chambres</div></div></div></div>';
+  } else if(groups.length>1){
+    cards=groups.map(function(gr){
+      var note=(data.gx&&data.gx[gr.g])||'';
+      return '<div class="bedgroup"><div class="glabel"><span class="gname">'+esc(gr.g)+'</span>'
+        +'<span class="gcount">'+gr.items.length+' chambre'+(gr.items.length>1?'s':'')+'</span>'
+        +(note?'<span class="gnote">'+esc(note)+'</span>':'')+'</div>'
+        +'<div class="sleep-scroll"><div class="bedcards">'+gr.items.map(card).join('')+'</div></div></div>';
+    }).join('');
+  } else {
+    cards='<div class="sleep-scroll"><div class="bedcards">'+rooms.map(card).join('')+'</div></div>';
+  }
+  var tally = rooms.length ? '<b>'+rooms.length+'</b> chambre'+(rooms.length>1?'s':'')
+      +(known?' · <b>'+nD+'</b> à lit double':'')
+      +(known&&known<rooms.length?' · '+(rooms.length-known)+' non détaillée'+((rooms.length-known)>1?'s':''):'') : '';
+  return {tally:tally, html:(groups.length>1?'<div class="bedgroups">'+cards+'</div>':cards)
+    + (data.plus?'<p class="flag">'+esc(data.plus)+'</p>':'')};
+}
+
+function distHTML(h){
+  var r=ROAD[h.id], keys=[['P','Paris'],['L','Lyon'],['T','Toulouse']];
+  if(!r) return '';
+  return '<div class="dists">'+keys.map(function(k){
+    var d=r[k[0]];
+    return '<div><dt>Depuis <b>'+k[1]+'</b></dt><dd>'+Math.floor(d[1]/60)+'h'+(d[1]%60<10?'0':'')+(d[1]%60)+'<small>'+d[0]+' km</small></dd></div>';
+  }).join('')+'</div>';
+}
+
+function tallyFor(id){
+  var t={oui:0,bof:0,non:0,names:{oui:[],bof:[],non:[]}};
+  Object.keys(state.voters).forEach(function(n){
+    if(n===me) return;
+    var v=(state.voters[n].votes||{})[id];
+    if(v&&t[v]!==undefined){ t[v]++; t.names[v].push(n); }
+  });
+  return t;
+}
+
+var EX_LABEL={yes:"Extra utilisable en hiver",part:"Extra partiel",none:"Pas d'extra"};
+
+function houseHTML(h){
+  var sup=SUPP[h.id]||{}, sl=sleepHTML(h), mv=myVotes()[h.id]||'';
+  var s='<article class="house'+(mv?' v-'+mv:'')+'" id="m-'+h.id+'">';
+  s+='<div class="head"><h3><span class="pin">'+h.n+'</span><a href="'+h.url+'" target="_blank" rel="noopener">'+esc(h.name)+'</a></h3>';
+  s+='<div class="place"><span class="src'+(h.src==='gdc'?' gdc':'')+'">'+(h.src==='gdc'?'Gens de Confiance':'Airbnb')+'</span> '+esc(h.commune)+(h.rating?' · ★ '+h.rating:'')+'</div></div>';
+  s+='<div class="money"><span class="total">'+esc(h.price)+'</span><span class="per">'+esc(h.per)+'</span></div>';
+  s+='<div class="body">';
+
+  s+='<div class="block"><div class="blabel"><span class="step">01</span><span>Le setup</span>'
+    +(sl.tally?'<span class="tally">'+sl.tally+'</span>':'')+'</div>';
+  if(sup.bld) s+='<div class="bld'+(/^[2-9]/.test(sup.bld)?' multi':'')+'">'+esc(sup.bld)
+    +(sup.bldx?'<span>'+esc(sup.bldx)+'</span>':'')+'</div>';
+  s+=sl.html+'</div>';
+
+  s+='<div class="block"><div class="blabel"><span class="step">02</span><span>Les distances</span>'
+    +'<span class="tally">temps de trajet calculés sur le réseau routier</span></div>'+distHTML(h)
+    +(h.train?'<p class="train"><b>En train</b>'+esc(h.train)+'</p>':'')+'</div>';
+
+  s+='<div class="block"><div class="blabel"><span class="step">03</span><span>Équipements et extras</span></div>';
+  s+='<div class="extra '+h.extra+'"><span class="mark">'+(h.extra==='yes'?'●':h.extra==='part'?'◐':'○')+' '+EX_LABEL[h.extra]+'</span><span>'+esc(h.extraTxt)+'</span></div>';
+  s+='<div class="tags">'+h.tags.map(function(t){return '<span class="tag'+(t[1]?' '+t[1]:'')+'">'+esc(t[0])+'</span>'}).join('')+'</div>';
+  if(PIERRE[h.id]) s+='<p class="pierre"><b>Le mot de Pierre</b>'+esc(PIERRE[h.id])+'</p>';
+  s+='</div>';
+
+  s+='</div>';
+
+  s+='<div class="vote"><div class="vrow"><span class="lbl">Ton avis</span>'
+    +['oui','bof','non'].map(function(v){
+      var lab = v==='oui'?'Oui !' : v==='bof'?'Bof' : 'Non';
+      return '<button type="button" class="vbtn'+(mv===v?' on':'')+'" data-v="'+v+'" data-h="'+h.id+'" aria-pressed="'+(mv===v)+'"><span class="fl"></span>'+lab+'</button>';
+    }).join('')+'</div>';
+  if(showOthers){
+    var t=tallyFor(h.id), tot=t.oui+t.bof+t.non;
+    if(tot){
+      s+='<div class="others"><span class="who">Les autres</span>'
+        +(t.oui?'<span class="o"><b>'+t.oui+'</b> oui</span>':'')
+        +(t.bof?'<span class="b"><b>'+t.bof+'</b> bof</span>':'')
+        +(t.non?'<span class="x"><b>'+t.non+'</b> non</span>':'')
+        +'<span class="who">'+esc([].concat(t.names.oui,t.names.bof,t.names.non).join(', '))+'</span></div>';
+    } else {
+      s+='<div class="others"><span class="who">Personne d\'autre n\'a encore voté</span></div>';
+    }
+  } else {
+    s+='<div class="others"><span class="hidden-note">Les votes des autres sont masqués — tu peux les afficher en haut de page</span></div>';
+  }
+  s+='</div>';
+
+  s+='</article>';
+  return s;
+}
+
+/* ---------------- étape 2 : classement ---------------- */
+function keptIds(){
+  var v=myVotes(), ids=HOUSES.filter(function(h){return v[h.id]==='oui'||v[h.id]==='bof'}).map(function(h){return h.id});
+  var saved=(myV().rank||[]).filter(function(id){return ids.indexOf(id)>-1});
+  ids.forEach(function(id){ if(saved.indexOf(id)===-1) saved.push(id); });
+  saved.sort(function(a,b){
+    var wa=v[a]==='oui'?0:1, wb=v[b]==='oui'?0:1;
+    if(wa!==wb) return wa-wb;
+    return saved.indexOf(a)-saved.indexOf(b);
+  });
+  return saved;
+}
+function rankHTML(){
+  var v=myVotes(), order=keptIds();
+  if(!order.length) return '<p class="section-note">Aucune maison retenue pour l\'instant. Mets au moins un « Oui ! » ou un « Bof » plus haut et cette liste apparaîtra.</p>';
+  return '<div class="rank">'+order.map(function(id,i){
+    var h=byId(id); if(!h) return '';
+    var r=ROAD[id]?ROAD[id].P:[0,0];
+    return '<div class="rankrow '+v[id]+'"><span class="pos">'+(i+1)+'</span>'
+      +'<span><span class="nm">'+esc(h.name)+'</span>'
+      +'<span class="sub">'+(v[id]==='oui'?'Oui !':'Bof')+' · '+esc(h.commune)+' · '+esc(h.price)+' · '+Math.floor(r[1]/60)+'h'+(r[1]%60<10?'0':'')+(r[1]%60)+' de Paris</span></span>'
+      +'<span class="mv"><button type="button" data-up="'+id+'"'+(i===0?' disabled':'')+' aria-label="Monter">↑</button>'
+      +'<button type="button" data-down="'+id+'"'+(i===order.length-1?' disabled':'')+' aria-label="Descendre">↓</button></span></div>';
+  }).join('')+'</div>';
+}
+
+/* ---------------- étape 3 : verdict ---------------- */
+function verdictHTML(){
+  var vd=myV().verdict||{};
+  return '<div class="verdict"><div class="toggle">'
+    +'<button type="button" class="'+(vd.v==='hate'?'on':'')+'" data-verdict="hate">'
+    +'<span class="t">Ça me donne hâte d\'y être</span><span class="d">La sélection me va, on peut choisir là-dedans.</span></button>'
+    +'<button type="button" class="'+(vd.v==='bof'?'on':'')+'" data-verdict="bof">'
+    +'<span class="t">Je trouve ça pas idéal</span><span class="d">Il manque quelque chose, il faut relancer une recherche.</span></button>'
+    +'</div>'
+    + (vd.v==='bof' ? '<div><p class="section-note" style="margin:0 0 10px">Qu\'est-ce qui cloche ? Plusieurs réponses possibles.</p><div class="reasons">'
+        + REASONS.map(function(r){
+            return '<button type="button" class="rbtn'+(((vd.reasons||[]).indexOf(r)>-1)?' on':'')+'" data-reason="'+esc(r)+'">'+esc(r)+'</button>';
+          }).join('') + '</div></div>' : '')
+    +'<textarea data-note placeholder="Un mot pour préciser, si tu veux…">'+esc(vd.note||'')+'</textarea>'
+    +'</div>';
+}
+
+/* ---------------- résultats ---------------- */
+function resultsHTML(){
+  var voters=Object.keys(state.voters);
+  if(!showOthers) return '<p class="section-note">Tu es en mode « réfléchir seul » : les résultats du groupe sont masqués. Le bouton en haut de page les affiche quand tu veux.</p>';
+  if(!voters.length) return '<p class="section-note">Personne n\'a encore enregistré de vote.</p>';
+  var rows=HOUSES.map(function(h){
+    var o=0,b=0,x=0;
+    voters.forEach(function(n){var v=(state.voters[n].votes||{})[h.id]; if(v==='oui')o++; else if(v==='bof')b++; else if(v==='non')x++;});
+    return {h:h,o:o,b:b,x:x,score:o*2+b};
+  }).filter(function(r){return r.o+r.b+r.x>0}).sort(function(a,b){return b.score-a.score||b.o-a.o});
+  if(!rows.length) return '<p class="section-note">Personne n\'a encore voté.</p>';
+  return '<div class="results">'+rows.map(function(r){
+    var tot=r.o+r.b+r.x||1;
+    return '<div class="rres"><span><span class="nm">'+esc(r.h.name)+'</span>'
+      +'<span class="sub">'+esc(r.h.commune)+' · '+esc(r.h.price)+'</span></span>'
+      +'<span style="display:flex;align-items:center;gap:11px"><span class="bar">'
+      +'<i class="o" style="width:'+(r.o/tot*100)+'%"></i><i class="b" style="width:'+(r.b/tot*100)+'%"></i><i class="x" style="width:'+(r.x/tot*100)+'%"></i>'
+      +'</span><span class="num">'+r.o+' / '+r.b+' / '+r.x+'</span></span></div>';
+  }).join('')+'</div>'
+  +'<p class="section-note" style="margin-top:14px">Lecture : nombre de « Oui ! » / « Bof » / « Non ». '+voters.length+' personne'+(voters.length>1?'s ont':' a')+' voté : '+esc(voters.join(', '))+'.</p>';
+}
+
+/* ---------------- page ---------------- */
+function renderBody(){
+  var s='<div class="wrap">';
+  s+='<header><div class="eyebrow">30 décembre 2026 → 2 janvier 2027 · 3 nuits</div>'
+    +'<h1>On part <em>où</em> ?</h1>'
+    +'<p class="standfirst">Dix-sept maisons disponibles sur les dates exactes, toutes au budget, toutes vérifiées une par une. Il n\'y a plus qu\'à dire ce que tu en penses — ça prend 5 minutes, sur le canapé, à la pause dej, ou même sur le pot.</p>'
+    +'<dl class="brief">'
+    +'<div><dt>Dates</dt><dd>30 déc → 2 jan</dd></div>'
+    +'<div><dt>Le groupe</dt><dd>9 adultes · 6 enfants · 1 baby</dd></div>'
+    +'<div><dt>Budget</dt><dd>4 000 – 4 400 €<small>~150 €/adulte/nuit, tolérance 10 %</small></dd></div>'
+    +'<div><dt>Maisons</dt><dd>17 à départager</dd></div>'
+    +'</dl></header>';
+
+  if(!me){
+    s+='<div class="gate"><h3>D\'abord, t\'es qui ?</h3>'
+      +'<p>Ton prénom sert juste à séparer ton vote de celui des autres. Il reste entre nous.</p>'
+      +'<div class="row"><input type="text" id="nom" placeholder="Ton prénom" autocomplete="given-name" maxlength="24">'
+      +'<button type="button" class="primary" id="go">C\'est parti</button></div></div>';
+    s+='</div>';
+    return s;
+  }
+
+  s+='<div class="gate"><h3>Bonjour '+esc(me)+' <button type="button" class="rename" id="rename">ce n\'est pas toi ?</button></h3>'
+    +'<p>Tu peux voir les votes des autres au fil de l\'eau, ou faire ton tour dans ton coin et ne les découvrir qu\'à la fin. Ça se change à tout moment.</p>'
+    +'<div class="toggle">'
+    +'<button type="button" class="'+(showOthers?'on':'')+'" data-see="1"><span class="t">Je veux voir les votes des autres</span>'
+    +'<span class="d">Leurs avis s\'affichent sous chaque maison, et les résultats du groupe en bas.</span></button>'
+    +'<button type="button" class="'+(showOthers?'':'on')+'" data-see="0"><span class="t">Je préfère d\'abord réfléchir seul</span>'
+    +'<span class="d">Tout est masqué jusqu\'à ce que tu changes d\'avis. Pour ne pas se laisser influencer.</span></button>'
+    +'</div></div>';
+
+  var v=myVotes(), done=HOUSES.filter(function(h){return v[h.id]}).length;
+
+  s+='<div class="section-head"><span class="step">Étape 1</span><h2>Le tri</h2>'
+    +'<span class="count">'+done+' / '+HOUSES.length+'</span></div>';
+  s+='<p class="section-note">Pour chaque maison : <b>Oui !</b> si tu la verrais bien, <b>Bof</b> si elle ne te déplaît pas sans t\'emballer, <b>Non</b> si c\'est non. Pas besoin d\'y prendre des heures, un bon coup d\'instinct suffit.<br><span class="hint">Pour voir la maison, clique sur son nom.</span></p>';
+  s+='<div class="houses">'+HOUSES.map(houseHTML).join('')+'</div>';
+
+  s+='<div class="section-head"><span class="step">Étape 2</span><h2>Le classement</h2>'
+    +'<span class="count">'+keptIds().length+' retenue'+(keptIds().length>1?'s':'')+'</span></div>';
+  s+='<p class="section-note">Tes « Oui ! » et tes « Bof » remontent ici, les verts d\'abord. Range-les de ta préférée à la dernière.</p>';
+  s+='<div id="rankzone">'+rankHTML()+'</div>';
+
+  s+='<div class="section-head"><span class="step">Étape 3</span><h2>Ton verdict</h2></div>';
+  s+='<p class="section-note">La question la plus utile : est-ce que cette sélection te donne envie, ou est-ce qu\'il faut qu\'on cherche autre chose ?</p>';
+  s+='<div id="verdictzone">'+verdictHTML()+'</div>';
+
+  s+='<div class="section-head"><h2>Où en est le groupe</h2></div>';
+  s+='<div id="reszone">'+resultsHTML()+'</div>';
+
+  s+='<div class="savebar"><span class="status" id="status"></span>'
+    +'<button type="button" class="ghost" id="copy">Voir mon récap</button>'
+    +'<button type="button" class="primary" id="save">Enregistrer mon vote</button></div>';
+
+  s+='<footer>Prix vérifiés aux dates exactes, taxes et frais de service compris. Temps de trajet calculés sur le réseau routier depuis Paris, Lyon et Toulouse. Les liens des titres ouvrent l\'annonce d\'origine.</footer>';
+
+  s+='<dialog id="dlg"><h4>Ton récap</h4><p>Sélectionne le texte et copie-le si tu veux l\'envoyer à Pierre.</p>'
+    +'<textarea id="dlgtxt" readonly></textarea><div class="row"><button type="button" class="ghost" id="dlgclose">Fermer</button></div></dialog>';
+
+  s+='</div>';
+  return s;
+}
+
+/* ---------------- document ---------------- */
+function buildDoc(st){
+  var css=document.getElementById('css').textContent, app=document.getElementById('app').textContent;
+  var close='<'+'/script>';
+  return '<!doctype html><html lang="fr"><head><meta charset="utf-8">'
+    +'<meta name="viewport" content="width=device-width, initial-scale=1"><title>On part où ?</title>'
+    +'<link rel="preconnect" href="https://fonts.googleapis.com">'
+    +'<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
+    +'<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap">'
+    +'<style id="css">'+css+'</style></head><body>'
+    +'<script id="app-state" type="application/json">'+JSON.stringify(st).replace(/</g,'\\u003c')+close
+    +'<div id="root"></div><script id="app">'+app+close+'</body></html>';
+}
+
+/* ---------------- état ---------------- */
+function ensureMe(){ if(!state.voters[me]) state.voters[me]={votes:{},rank:[],verdict:{}}; return state.voters[me]; }
+function touch(){ dirty=true; setStatus(); persistLocal(); }
+function persistLocal(){ try{ localStorage.setItem('vote-brouillon', JSON.stringify(state.voters[me]||{})); }catch(e){} }
+
+function setStatus(msg){
+  var el=document.getElementById('status'); if(!el) return;
+  if(msg){ el.innerHTML=msg; return; }
+  var v=myVotes(), done=HOUSES.filter(function(h){return v[h.id]}).length;
+  el.innerHTML='<b>'+done+'</b> / '+HOUSES.length+' maisons triées'
+    + (dirty ? ' — <b>pense à enregistrer</b>' : done? ' — enregistré' : '');
+}
+
+function recap(){
+  var v=myVotes(), order=keptIds(), vd=myV().verdict||{};
+  var L=['Vote de '+me+' — maison du 30/12 au 02/01',''];
+  L.push('Mon classement :');
+  if(order.length) order.forEach(function(id,i){ var h=byId(id); L.push('  '+(i+1)+'. '+h.name+' ('+h.commune+', '+h.price+') — '+(v[id]==='oui'?'Oui !':'Bof')); });
+  else L.push('  (rien de retenu)');
+  var nons=HOUSES.filter(function(h){return v[h.id]==='non'});
+  if(nons.length){ L.push(''); L.push('Non : '+nons.map(function(h){return h.name}).join(', ')); }
+  L.push('');
+  L.push('Verdict : '+(vd.v==='hate'?"ça me donne hâte d'y être":vd.v==='bof'?"pas idéal":'(pas encore répondu)'));
+  if(vd.v==='bof'&&(vd.reasons||[]).length) L.push('Ce qui cloche : '+vd.reasons.join(', '));
+  if(vd.note&&vd.note.trim()) L.push('Note : '+vd.note.trim());
+  return L.join('\n');
+}
+
+function repaint(zone){
+  if(zone==='rank'||!zone){ var rz=document.getElementById('rankzone'); if(rz) rz.innerHTML=rankHTML(); }
+  if(zone==='verdict'||!zone){ var vz=document.getElementById('verdictzone'); if(vz) vz.innerHTML=verdictHTML(); }
+  if(zone==='res'||!zone){ var sz=document.getElementById('reszone'); if(sz) sz.innerHTML=resultsHTML(); }
+  var cnt=document.querySelectorAll('.section-head .count');
+  if(cnt[0]){ var v=myVotes(); cnt[0].textContent=HOUSES.filter(function(h){return v[h.id]}).length+' / '+HOUSES.length; }
+  if(cnt[1]){ var k=keptIds().length; cnt[1].textContent=k+' retenue'+(k>1?'s':''); }
+}
+
+function full(){ document.getElementById('root').innerHTML=renderBody(); bind(); setStatus(); }
+
+/* ---------------- interactions ---------------- */
+function onClick(e){
+  var t=e.target; if(!t||!t.closest) return;
+
+  var see=t.closest('[data-see]');
+  if(see){ showOthers=see.getAttribute('data-see')==='1';
+    try{ localStorage.setItem('vote-voir',showOthers?'1':'0'); }catch(err){}
+    full(); return; }
+
+  var vb=t.closest('.vbtn');
+  if(vb){
+    var id=vb.getAttribute('data-h'), val=vb.getAttribute('data-v'), m=ensureMe();
+    if(m.votes[id]===val) delete m.votes[id]; else m.votes[id]=val;
+    touch();
+    var art=document.getElementById('m-'+id);
+    if(art){ var tmp=document.createElement('div'); tmp.innerHTML=houseHTML(byId(id));
+      var fresh=tmp.firstElementChild; if(fresh) art.replaceWith(fresh); }
+    repaint('rank'); repaint('res'); return;
+  }
+
+  var up=t.closest('[data-up]'), dn=t.closest('[data-down]');
+  if(up||dn){
+    var mid=(up||dn).getAttribute(up?'data-up':'data-down');
+    var m2=ensureMe(), order=keptIds(), a=order.indexOf(mid), b=up?a-1:a+1;
+    if(b>=0&&b<order.length){ var sw=order[a]; order[a]=order[b]; order[b]=sw; m2.rank=order; touch(); repaint('rank'); }
+    return;
+  }
+
+  var vd=t.closest('[data-verdict]');
+  if(vd){ var m3=ensureMe(); m3.verdict=m3.verdict||{};
+    m3.verdict.v=vd.getAttribute('data-verdict'); touch(); repaint('verdict'); return; }
+
+  var rb=t.closest('[data-reason]');
+  if(rb){ var m4=ensureMe(); m4.verdict=m4.verdict||{}; m4.verdict.reasons=m4.verdict.reasons||[];
+    var r=rb.getAttribute('data-reason'), k=m4.verdict.reasons.indexOf(r);
+    if(k>-1) m4.verdict.reasons.splice(k,1); else m4.verdict.reasons.push(r);
+    touch(); repaint('verdict'); return; }
+}
+
+function onInput(e){
+  if(e.target&&e.target.hasAttribute&&e.target.hasAttribute('data-note')){
+    var m=ensureMe(); m.verdict=m.verdict||{}; m.verdict.note=e.target.value; touch();
+  }
+}
+
+function bind(){
+  var root=document.getElementById('root');
+
+  /* La délégation ne s'attache qu'une seule fois : sans ce garde, chaque
+     re-rendu ajoutait un écouteur de plus et le clic comptait double. */
+  if(!root.__bound){
+    root.__bound=true;
+    root.addEventListener('click',onClick);
+    root.addEventListener('input',onInput);
+    window.addEventListener('beforeunload',function(e){ if(dirty){ e.preventDefault(); e.returnValue=''; } });
+  }
+
+  var go=document.getElementById('go');
+  if(go){
+    var inp=document.getElementById('nom');
+    var start=function(){
+      var n=(inp.value||'').trim().slice(0,24);
+      if(!n){ inp.focus(); return; }
+      me=n; if(showOthers===null) showOthers=false;
+      try{ localStorage.setItem('vote-nom',me); localStorage.setItem('vote-voir',showOthers?'1':'0'); }catch(err){}
+      ensureMe(); full();
+    };
+    go.addEventListener('click',start);
+    inp.addEventListener('keydown',function(e){ if(e.key==='Enter') start(); });
+    return;
+  }
+
+  var sv=document.getElementById('save'); if(sv) sv.addEventListener('click',save);
+  var cp=document.getElementById('copy');
+  if(cp) cp.addEventListener('click',function(){
+    var d=document.getElementById('dlg'), tx=document.getElementById('dlgtxt');
+    tx.value=recap(); if(d.showModal) d.showModal(); else window.prompt('Copie :',tx.value);
+    tx.focus(); tx.select();
+  });
+  var dc=document.getElementById('dlgclose');
+  if(dc) dc.addEventListener('click',function(){ document.getElementById('dlg').close(); });
+  var rn=document.getElementById('rename');
+  if(rn) rn.addEventListener('click',function(){
+    try{ localStorage.removeItem('vote-nom'); }catch(err){}
+    me=null; full();
+  });
+}
+
+function formBody(){
+  var v=myVotes(), order=keptIds(), vd=myV().verdict||{};
+  var compact=HOUSES.filter(function(h){return v[h.id]})
+    .map(function(h){ return h.n+':'+h.name+'='+v[h.id]; }).join(' | ');
+  var rank=order.map(function(id,i){ var h=byId(id); return (i+1)+'. '+h.name+' ('+(v[id]==='oui'?'Oui':'Bof')+')'; }).join(' | ');
+  var p=new URLSearchParams();
+  p.append(CFG.ENTRY.nom, me);
+  p.append(CFG.ENTRY.votes, compact);
+  p.append(CFG.ENTRY.classement, rank);
+  p.append(CFG.ENTRY.verdict, vd.v==='hate'?"hâte d'y être":vd.v==='bof'?'pas idéal':'');
+  p.append(CFG.ENTRY.raisons, (vd.reasons||[]).join(', '));
+  p.append(CFG.ENTRY.note, vd.note||'');
+  return p;
+}
+
+function save(){
+  var btn=document.getElementById('save');
+  ensureMe(); persistLocal();
+
+  if(!CFG.FORM_ACTION){
+    dirty=false;
+    setStatus('Gardé sur cet appareil — l\'envoi groupé n\'est pas encore branché');
+    return;
+  }
+  btn.disabled=true; setStatus('Envoi…');
+  /* Le formulaire Google n'autorise pas la lecture de sa réponse : on poste
+     en aveugle, ce qui suffit — l'écriture aboutit. */
+  fetch(CFG.FORM_ACTION,{method:'POST',mode:'no-cors',body:formBody()})
+    .then(function(){
+      dirty=false; btn.disabled=false;
+      try{ localStorage.setItem('vote-envoye',String(Date.now())); }catch(e){}
+      setStatus('<b>Envoyé.</b> Merci ' + esc(me) + ' — tu peux fermer, ou revenir modifier et renvoyer.');
+      loadOthers(true);
+    },function(){
+      btn.disabled=false;
+      setStatus('L\'envoi a échoué. Ton vote est gardé sur cet appareil, réessaie dans un instant.');
+    });
+}
+
+/* ---------------- lecture des votes du groupe ---------------- */
+function parseCSV(text){
+  var rows=[], row=[], cur='', q=false;
+  for(var i=0;i<text.length;i++){
+    var c=text[i];
+    if(q){
+      if(c==='"'){ if(text[i+1]==='"'){cur+='"';i++} else q=false; }
+      else cur+=c;
+    } else if(c==='"'){ q=true; }
+    else if(c===','){ row.push(cur); cur=''; }
+    else if(c==='\n'){ row.push(cur); rows.push(row); row=[]; cur=''; }
+    else if(c!=='\r'){ cur+=c; }
+  }
+  if(cur.length||row.length){ row.push(cur); rows.push(row); }
+  return rows.filter(function(r){ return r.some(function(x){return x.trim()}) });
+}
+
+function loadOthers(force){
+  if(!CFG.CSV || loadingOthers) return;
+  loadingOthers=true; othersError=false;
+  fetch(CFG.CSV+(force?('&_='+Date.now()):''))
+    .then(function(r){ return r.text(); })
+    .then(function(t){
+      var rows=parseCSV(t); if(rows.length<2){ loadingOthers=false; return; }
+      var head=rows[0].map(function(h){return h.toLowerCase()});
+      var iNom=head.findIndex(function(h){return h.indexOf('prénom')>-1||h.indexOf('prenom')>-1});
+      var iVotes=head.findIndex(function(h){return h.indexOf('vote')>-1});
+      if(iNom<0||iVotes<0){ loadingOthers=false; return; }
+      var fresh={};
+      rows.slice(1).forEach(function(r){
+        var nom=(r[iNom]||'').trim(); if(!nom) return;
+        var votes={};
+        (r[iVotes]||'').split('|').forEach(function(part){
+          var m=part.split('=');
+          if(m.length<2) return;
+          var label=m[0].trim(), val=m[1].trim();
+          var num=parseInt(label,10);
+          var h=HOUSES.filter(function(x){return x.n===num})[0];
+          if(h && ['oui','bof','non'].indexOf(val)>-1) votes[h.id]=val;
+        });
+        fresh[nom]={votes:votes};            /* la dernière ligne d'un même prénom l'emporte */
+      });
+      if(state.voters[me]) fresh[me]=state.voters[me];
+      state.voters=fresh;
+      loadingOthers=false;
+      if(me){ repaint('res'); repaintOthers(); }
+    })
+    .catch(function(){ loadingOthers=false; othersError=true; });
+}
+
+function repaintOthers(){
+  if(!showOthers) return;
+  HOUSES.forEach(function(h){
+    var art=document.getElementById('m-'+h.id); if(!art) return;
+    var tmp=document.createElement('div'); tmp.innerHTML=houseHTML(h);
+    var fresh=tmp.firstElementChild; if(fresh) art.replaceWith(fresh);
+  });
+}
+
+/* ---------------- boot ---------------- */
+if(me){
+  ensureMe();
+  try{
+    var d=localStorage.getItem('vote-brouillon');
+    if(d){
+      var pd=JSON.parse(d), cur=state.voters[me]||{};
+      var nLocal=Object.keys((pd&&pd.votes)||{}).length, nPub=Object.keys(cur.votes||{}).length;
+      if(pd && nLocal>nPub) state.voters[me]=pd;
+    }
+  }catch(e){}
+}
+full();
+loadOthers();
+
+</script>
