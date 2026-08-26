@@ -5,27 +5,27 @@
 
 <style id="css">
 :root{
-  --ground:#EDEEE8; --surface:#F7F8F3; --surface-2:#E4E7DE; --line:#CBD1C4;
-  --ink:#1B2320; --ink-2:#55605A; --ink-3:#7C877F;
-  --accent:#A63A2B; --forest:#33523F; --gold:#8A6A1F;
-  --oui:#3C6B4A; --bof:#8A6A1F; --non:#8A928B;
-  --shadow:0 1px 0 rgba(27,35,32,.05);
+  --ground:#F2EDE3; --surface:#FBF8F1; --surface-2:#E9E0CF; --line:#D0C4B0;
+  --ink:#171310; --ink-2:#463D34; --ink-3:#796C5E;
+  --accent:#B23A20; --forest:#2E5741; --gold:#8A5E12;
+  --oui:#2F6B45; --bof:#8A5E12; --non:#877B6D;
+  --shadow:0 1px 0 rgba(23,19,16,.06);
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --ground:#131714; --surface:#1C221E; --surface-2:#252C27; --line:#333C36;
-    --ink:#E9ECE3; --ink-2:#A2ADA4; --ink-3:#7C877F;
-    --accent:#E3765F; --forest:#87B295; --gold:#D3B063;
-    --oui:#7FBE93; --bof:#D3B063; --non:#79837B;
-    --shadow:0 1px 0 rgba(0,0,0,.3);
+    --ground:#17130F; --surface:#211B15; --surface-2:#2C241B; --line:#3F3529;
+    --ink:#F5EEE3; --ink-2:#BCAD9A; --ink-3:#8E8070;
+    --accent:#F0805C; --forest:#8FBFA0; --gold:#E0BC74;
+    --oui:#8ED3A4; --bof:#E0BC74; --non:#8E8376;
+    --shadow:0 1px 0 rgba(0,0,0,.35);
   }
 }
 :root[data-theme="dark"]{
-  --ground:#131714; --surface:#1C221E; --surface-2:#252C27; --line:#333C36;
-  --ink:#E9ECE3; --ink-2:#A2ADA4; --ink-3:#7C877F;
-  --accent:#E3765F; --forest:#87B295; --gold:#D3B063;
-  --oui:#7FBE93; --bof:#D3B063; --non:#79837B;
-  --shadow:0 1px 0 rgba(0,0,0,.3);
+  --ground:#17130F; --surface:#211B15; --surface-2:#2C241B; --line:#3F3529;
+  --ink:#F5EEE3; --ink-2:#BCAD9A; --ink-3:#8E8070;
+  --accent:#F0805C; --forest:#8FBFA0; --gold:#E0BC74;
+  --oui:#8ED3A4; --bof:#E0BC74; --non:#8E8376;
+  --shadow:0 1px 0 rgba(0,0,0,.35);
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--ground);color:var(--ink);
@@ -187,17 +187,20 @@ h2{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:1.45re
 .vrow .lbl{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.13em;
   text-transform:uppercase;color:var(--ink-3);margin-right:4px}
 .vbtn{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:.95rem;
-  background:var(--ground);color:var(--ink-2);border:1px solid var(--line);
-  padding:8px 16px;border-radius:2px;cursor:pointer;display:flex;align-items:center;gap:7px}
-.vbtn:hover{border-color:var(--ink-3)}
+  background:var(--surface);color:var(--ink-2);border:1.5px solid var(--line);
+  padding:8px 16px;border-radius:2px;cursor:pointer;display:flex;align-items:center;gap:7px;
+  transition:background .12s,border-color .12s,color .12s}
+.vbtn:hover{border-color:var(--ink-3);color:var(--ink)}
 .vbtn .fl{width:11px;height:11px;border-radius:2px;background:var(--line);flex:none}
 .vbtn[data-v=oui] .fl{background:var(--oui)}
 .vbtn[data-v=bof] .fl{background:var(--bof)}
 .vbtn[data-v=non] .fl{background:var(--non)}
-.vbtn.on{color:var(--ink);border-color:currentColor;background:var(--surface-2)}
-.vbtn[data-v=oui].on{border-color:var(--oui);color:var(--oui)}
-.vbtn[data-v=bof].on{border-color:var(--bof);color:var(--bof)}
-.vbtn[data-v=non].on{border-color:var(--non);color:var(--non)}
+/* Sélectionné : pastille pleine — c'est le seul état qu'on doit repérer d'un coup d'œil. */
+.vbtn.on{color:var(--ground)}
+.vbtn.on .fl{background:var(--ground)}
+.vbtn[data-v=oui].on{border-color:var(--oui);background:var(--oui)}
+.vbtn[data-v=bof].on{border-color:var(--bof);background:var(--bof)}
+.vbtn[data-v=non].on{border-color:var(--non);background:var(--non)}
 .others{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink-2);
   letter-spacing:.02em;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
 .others .who{color:var(--ink-3)}
@@ -208,8 +211,17 @@ h2{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:1.45re
 
 /* --- classement --- */
 .rank{display:flex;flex-direction:column;gap:8px}
-.rankrow{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;
-  background:var(--surface);border:1px solid var(--line);padding:12px 14px}
+.rankrow{display:grid;grid-template-columns:auto auto 1fr auto;gap:12px;align-items:center;
+  background:var(--surface);border:1px solid var(--line);padding:12px 14px;
+  transition:transform .16s ease,box-shadow .12s,border-color .12s}
+.rankrow .grip{color:var(--ink-3);cursor:grab;touch-action:none;padding:4px 2px;
+  display:flex;align-items:center;margin:-4px -2px}
+.rankrow .grip:hover{color:var(--accent)}
+.rankrow.dragging{transition:none;cursor:grabbing;z-index:5;position:relative;
+  border-color:var(--accent);box-shadow:0 8px 22px rgba(23,19,16,.18)}
+.rankrow.dragging .grip{cursor:grabbing}
+.rankrow.shifted{transition:transform .16s ease}
+body.dragging-rank{user-select:none;-webkit-user-select:none}
 .rankrow.oui{border-left:3px solid var(--oui)}
 .rankrow.bof{border-left:3px solid var(--bof)}
 .rankrow .pos{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:1.2rem;
@@ -222,6 +234,8 @@ h2{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:1.45re
   width:34px;height:34px;border-radius:2px;cursor:pointer;font-size:15px;line-height:1}
 .rankrow .mv button:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
 .rankrow .mv button:disabled{opacity:.3;cursor:default}
+.rankhint{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.04em;
+  color:var(--ink-3);margin:-8px 0 14px}
 
 /* --- verdict --- */
 .verdict{display:flex;flex-direction:column;gap:16px}
@@ -1010,10 +1024,14 @@ function keptIds(){
   var v=myVotes(), ids=HOUSES.filter(function(h){return v[h.id]==='oui'||v[h.id]==='bof'}).map(function(h){return h.id});
   var saved=(myV().rank||[]).filter(function(id){return ids.indexOf(id)>-1});
   ids.forEach(function(id){ if(saved.indexOf(id)===-1) saved.push(id); });
+  /* Les Oui d'abord, les Bof ensuite, et à l'intérieur de chaque bloc l'ordre
+     que la personne a choisi. On fige les positions AVANT de trier : indexOf
+     sur le tableau en cours de tri renvoie des positions déjà déplacées. */
+  var pos={}; saved.forEach(function(id,i){ pos[id]=i; });
   saved.sort(function(a,b){
     var wa=v[a]==='oui'?0:1, wb=v[b]==='oui'?0:1;
     if(wa!==wb) return wa-wb;
-    return saved.indexOf(a)-saved.indexOf(b);
+    return pos[a]-pos[b];
   });
   return saved;
 }
@@ -1023,7 +1041,12 @@ function rankHTML(){
   return '<div class="rank">'+order.map(function(id,i){
     var h=byId(id); if(!h) return '';
     var r=ROAD[id]?ROAD[id].P:[0,0];
-    return '<div class="rankrow '+v[id]+'"><span class="pos">'+(i+1)+'</span>'
+    return '<div class="rankrow '+v[id]+'" data-rid="'+id+'">'
+      +'<span class="grip" aria-hidden="true"><svg width="11" height="17" viewBox="0 0 11 17">'
+      +'<g fill="currentColor"><circle cx="3" cy="3.5" r="1.5"/><circle cx="8" cy="3.5" r="1.5"/>'
+      +'<circle cx="3" cy="8.5" r="1.5"/><circle cx="8" cy="8.5" r="1.5"/>'
+      +'<circle cx="3" cy="13.5" r="1.5"/><circle cx="8" cy="13.5" r="1.5"/></g></svg></span>'
+      +'<span class="pos">'+(i+1)+'</span>'
       +'<span><span class="nm">'+esc(h.name)+'</span>'
       +'<span class="sub">'+(v[id]==='oui'?'Oui !':'Bof')+' · '+esc(h.commune)+' · '+esc(h.price)+' · '+Math.floor(r[1]/60)+'h'+(r[1]%60<10?'0':'')+(r[1]%60)+' de Paris</span></span>'
       +'<span class="mv"><button type="button" data-up="'+id+'"'+(i===0?' disabled':'')+' aria-label="Monter">↑</button>'
@@ -1111,6 +1134,7 @@ function renderBody(){
   s+='<div class="section-head"><span class="step">Étape 2</span><h2>Le classement</h2>'
     +'<span class="count">'+keptIds().length+' retenue'+(keptIds().length>1?'s':'')+'</span></div>';
   s+='<p class="section-note">Tes « Oui ! » et tes « Bof » remontent ici, les verts d\'abord. Range-les de ta préférée à la dernière.</p>';
+  s+='<p class="rankhint">Attrape une ligne par les points à gauche pour la déplacer — ou sers-toi des flèches.</p>';
   s+='<div id="rankzone">'+rankHTML()+'</div>';
 
   s+='<div class="section-head"><span class="step">Étape 3</span><h2>Ton verdict</h2></div>';
@@ -1231,6 +1255,90 @@ function onInput(e){
   }
 }
 
+/* ---------------- glisser-déposer du classement ----------------
+   Pointer Events plutôt que l'API drag-and-drop HTML5 : celle-ci ne marche
+   pas au doigt, et la moitié des copains voteront depuis leur téléphone.
+   La poignée porte touch-action:none pour que le geste ne scrolle pas la page ;
+   le reste de la ligne reste attrapable à la souris. */
+var drag=null;
+
+function rankGap(rects){
+  return rects.length>1 ? Math.max(0, rects[1].top-rects[0].bottom) : 8;
+}
+
+function dragStart(e){
+  if(drag) return;
+  if(e.button!==undefined && e.button!==0) return;
+  var t=e.target; if(!t||!t.closest) return;
+  if(t.closest('button')) return;
+  var row=t.closest('.rankrow'); if(!row) return;
+  var onGrip=!!t.closest('.grip');
+  /* Au doigt, on n'attrape que par la poignée, sinon on bloque le défilement. */
+  if(!onGrip && e.pointerType && e.pointerType!=='mouse') return;
+
+  var zone=document.getElementById('rankzone'); if(!zone) return;
+  var rows=[].slice.call(zone.querySelectorAll('.rankrow'));
+  if(rows.length<2) return;
+  var from=rows.indexOf(row); if(from<0) return;
+
+  var v=myVotes(), order=keptIds(), grp=v[order[from]];
+  var lo=from, hi=from;
+  while(lo>0 && v[order[lo-1]]===grp) lo--;
+  while(hi<order.length-1 && v[order[hi+1]]===grp) hi++;
+  if(lo===hi) return;   /* seule de son groupe : rien à réordonner */
+
+  drag={rows:rows, rects:rows.map(function(r){return r.getBoundingClientRect()}),
+        row:row, from:from, to:from, lo:lo, hi:hi,
+        startY:e.clientY, moved:false, pid:e.pointerId};
+  try{ row.setPointerCapture(e.pointerId); }catch(err){}
+}
+
+function dragMove(e){
+  var d=drag; if(!d || e.pointerId!==d.pid) return;
+  var dy=e.clientY-d.startY;
+  if(!d.moved){
+    if(Math.abs(dy)<5) return;
+    d.moved=true;
+    d.row.classList.add('dragging');
+    document.body.classList.add('dragging-rank');
+  }
+  if(e.cancelable) e.preventDefault();
+
+  var mine=d.rects[d.from];
+  var centre=mine.top+mine.height/2+dy;
+  var to=0;
+  for(var i=0;i<d.rects.length;i++){
+    if(i===d.from) continue;
+    if(centre > d.rects[i].top+d.rects[i].height/2) to++;
+  }
+  to=Math.max(d.lo, Math.min(d.hi, to));
+  d.to=to;
+
+  var step=mine.height+rankGap(d.rects);
+  d.row.style.transform='translateY('+dy+'px)';
+  d.rows.forEach(function(r,i){
+    if(i===d.from) return;
+    var shift=0;
+    if(to>d.from && i>d.from && i<=to) shift=-step;
+    else if(to<d.from && i>=to && i<d.from) shift=step;
+    r.classList.add('shifted');
+    r.style.transform = shift ? 'translateY('+shift+'px)' : '';
+  });
+}
+
+function dragEnd(e){
+  var d=drag; if(!d || (e && e.pointerId!==undefined && e.pointerId!==d.pid)) return;
+  drag=null;
+  try{ d.row.releasePointerCapture(d.pid); }catch(err){}
+  d.rows.forEach(function(r){ r.style.transform=''; r.classList.remove('shifted','dragging'); });
+  document.body.classList.remove('dragging-rank');
+  if(!d.moved || d.to===d.from) return;
+  var m=ensureMe(), order=keptIds();
+  var id=order.splice(d.from,1)[0];
+  order.splice(d.to,0,id);
+  m.rank=order; touch(); repaint('rank');
+}
+
 function bind(){
   var root=document.getElementById('root');
 
@@ -1240,6 +1348,10 @@ function bind(){
     root.__bound=true;
     root.addEventListener('click',onClick);
     root.addEventListener('input',onInput);
+    root.addEventListener('pointerdown',dragStart);
+    window.addEventListener('pointermove',dragMove,{passive:false});
+    window.addEventListener('pointerup',dragEnd);
+    window.addEventListener('pointercancel',dragEnd);
     window.addEventListener('beforeunload',function(e){ if(dirty){ e.preventDefault(); e.returnValue=''; } });
   }
 
