@@ -293,14 +293,14 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-off
 /* ------------------------------------------------------------------
    CONFIGURATION — les deux adresses à remplir une fois pour toutes.
    FORM_ACTION : l'URL "formResponse" du formulaire Google.
-   ENTRY       : l'identifiant de chaque question du formulaire.
+   ENTRY       : l'identifiant de chaque question (Prénom, Votes, Résumé).
    CSV         : le Sheet des réponses, publié sur le web au format CSV.
    Tant que FORM_ACTION est vide, la page fonctionne en local seulement.
 ------------------------------------------------------------------- */
 var CFG = {
-  FORM_ACTION: "",
-  ENTRY: { nom:"", votes:"", classement:"", verdict:"", raisons:"", note:"" },
-  CSV: ""
+  FORM_ACTION: "https://docs.google.com/forms/d/e/1FAIpQLSfPtPI08jRrTmtLsrLEfe7oENFdQViXnSr5aliR4bW3u1JYKg/formResponse",
+  ENTRY: { nom:"entry.1815120392", votes:"entry.34606953", resume:"entry.1362266868" },
+  CSV: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSKuhbH6Eto3KorHvzF5t2JoHxMJiIHPczIgoarzfGgrXJ42xbjQ7VO652_9OtWJdlqvZ06k9gGUI89/pub?output=csv"
 };
 
 var state = { voters: {} };
@@ -1279,13 +1279,17 @@ function formBody(){
   var compact=HOUSES.filter(function(h){return v[h.id]})
     .map(function(h){ return h.n+':'+h.name+'='+v[h.id]; }).join(' | ');
   var rank=order.map(function(id,i){ var h=byId(id); return (i+1)+'. '+h.name+' ('+(v[id]==='oui'?'Oui':'Bof')+')'; }).join(' | ');
+  var verdict = vd.v==='hate'?"hâte d'y être":vd.v==='bof'?'pas idéal':'';
+  var resume = [
+    rank ? 'Classement : '+rank : '',
+    verdict ? 'Verdict : '+verdict : '',
+    (vd.reasons||[]).length ? 'Raisons : '+(vd.reasons||[]).join(', ') : '',
+    vd.note ? 'Note : '+vd.note : ''
+  ].filter(Boolean).join('\n');
   var p=new URLSearchParams();
   p.append(CFG.ENTRY.nom, me);
   p.append(CFG.ENTRY.votes, compact);
-  p.append(CFG.ENTRY.classement, rank);
-  p.append(CFG.ENTRY.verdict, vd.v==='hate'?"hâte d'y être":vd.v==='bof'?'pas idéal':'');
-  p.append(CFG.ENTRY.raisons, (vd.reasons||[]).join(', '));
-  p.append(CFG.ENTRY.note, vd.note||'');
+  p.append(CFG.ENTRY.resume, resume);
   return p;
 }
 
