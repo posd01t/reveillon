@@ -375,11 +375,7 @@ try { me = localStorage.getItem('vote-nom') || null; } catch(e){}
 try { var so = localStorage.getItem('vote-voir'); if(so !== null) showOthers = (so === '1'); } catch(e){}
 
 var PIERRE = {
- lorris:"L'annonce n'est pas top : pas de photo de l'espace sauna ni de la salle de sport. Si on la garde au prochain tour, il faudra demander des photos.",
  boislandry:"Moins stylé, mais moins cher que les autres avec piscine intérieure.",
- favril:"Sympa, mais deux maisons, peut-être pas idéal. Et pas d'extra.",
- sylvains:"La fiche plafonne à 15 voyageurs et on est 15 plus un bébé : à faire confirmer.",
- cinqmars:"Le sauna et le jacuzzi se paient à la journée, en plus du loyer.",
  annay:"La même maison est aussi sur Airbnb, 414 € plus cher. On réserverait côté Gens de Confiance."
 };
 
@@ -395,7 +391,7 @@ var ALL_HOUSES = [
    tags:[["Piscine couverte chauffée · toute l'année",'spa'],['Poêle à bois','hot'],['Billard',''],['Salle de jeux enfants',''],['Ping-pong','']],
    flag:"Pile au plafond : 4 400 €. L'annexe pour la famille d'Avignon est facturée en supplément." },
 
- { id:'lorris', n:2, name:"La maison de charme et sa grange", src:'gdc', star:true,
+ { id:'lorris', drop:true, n:2, name:"La maison de charme et sa grange", src:'gdc', star:true,
    url:"https://gensdeconfiance.com/fr/ui/post/vacations__rentals/bcadafaa-2e1c-434c-a198-481746e95ad8",
    commune:"Lorris (45)", km:135, lat:47.89, lng:2.51, rating:"5,0",
    price:"2 363 €", per:"88 € / adulte / nuit", sort:2363, band:1, was:"annoncé ~2 100 €",
@@ -456,7 +452,7 @@ var ALL_HOUSES = [
    tags:[['Jacuzzi chauffé 8-10 pers.','spa'],['Cheminée','hot'],['Lit bébé + chaise haute',''],['Salle de jeux','']],
    flag:"Deux salles de bain seulement, et une chambre accessible par échelle." },
 
- { id:'beaugency', n:8, name:"Le gîte sauna et balnéo", src:'gdc',
+ { id:'beaugency', drop:true, n:8, name:"Le gîte sauna et balnéo", src:'gdc',
    url:"https://gensdeconfiance.com/fr/ui/post/vacations__rentals/3afba1ba-5da0-40e9-be69-deff6e497fcd",
    commune:"Cravant, près de Beaugency (45)", km:163, lat:47.80, lng:1.58, rating:null,
    price:"2 272 €", per:"84 € / adulte / nuit", sort:2272, band:2, was:"annoncé ~1 800 €",
@@ -478,7 +474,7 @@ var ALL_HOUSES = [
    tags:[['Jacuzzi privé','spa'],['8 chambres',''],['2 sdb privatives',''],['Ping-pong','']],
    flag:"Peu de salles de bain annoncées, et la chambre 8 est une mezzanine ouverte sur la salle à manger — pas idéale pour un couple." },
 
- { id:'favril', n:10, name:"La chaumière du Favril", src:'gdc',
+ { id:'favril', drop:true, n:10, name:"La chaumière du Favril", src:'gdc',
    url:"https://gensdeconfiance.com/fr/ui/post/vacations__rentals/6f74576d-f902-4999-86d0-8da4b6eff0c7",
    commune:"Le Favril (28)", km:122, lat:48.36, lng:0.93, rating:"5,0",
    price:"2 688 €", per:"100 € / adulte / nuit", sort:2688, band:1, was:"annoncé ~2 250 €",
@@ -500,7 +496,7 @@ var ALL_HOUSES = [
    flag:"Ton point sur la rivière au pied de la maison avec un nourrisson tient toujours. Réserver côté Gens de Confiance, l'annonce Airbnb du même bien est plus chère.",
    prev:"Pas mal. Point bonus pour le jacuzzi toute l'année, point malus pour la rivière qui peut être un no go pour nourrisson. Attention ! Avec les dates c'est 2 650 €" },
 
- { id:'moriers', n:12, name:"Grande Maison de Campagne 4★", src:'airbnb',
+ { id:'moriers', drop:true, n:12, name:"Grande Maison de Campagne 4★", src:'airbnb',
    url:"https://www.airbnb.fr/rooms/1247748044135019066?check_in=2026-12-30&check_out=2027-01-02&adults=9&children=6&infants=1",
    commune:"Moriers (28)", km:123, lat:48.15, lng:1.34, rating:"5,0",
    price:"3 684 €", per:"136 € / adulte / nuit", sort:3684, band:1,
@@ -521,7 +517,7 @@ var ALL_HOUSES = [
    tags:[['Sauna 120 €/j','spa'],['Jacuzzi 70 €/j','spa'],['Brasero',''],['12 vélos',''],['Babyfoot','']],
    flag:"La fiche annonce bien 9 chambres et 22 voyageurs — mais trois sont des troglodytes à 120 € la nuit, et le sauna comme le jacuzzi se paient à la journée." },
 
- { id:'longny', n:14, name:"Maison familiale dans le Perche", src:'gdc',
+ { id:'longny', drop:true, n:14, name:"Maison familiale dans le Perche", src:'gdc',
    url:"https://gensdeconfiance.com/fr/ui/post/vacations__rentals/a8781a22-fbc4-4f89-a762-d46c6daae8d1",
    commune:"Longny-les-Villages (61)", km:152, lat:48.53, lng:0.75, rating:"5,0",
    price:"2 158 €", per:"80 € / adulte / nuit", sort:2158, band:2, was:"annoncé ~1 050 €",
@@ -1146,12 +1142,12 @@ function renderBody(){
   var s='<div class="wrap">';
   s+='<header><div class="eyebrow">30 décembre 2026 → 2 janvier 2027 · 3 nuits</div>'
     +'<h1>On part <em>où</em> ?</h1>'
-    +'<p class="standfirst">Quatorze maisons disponibles sur les dates exactes, toutes au budget, toutes vérifiées une par une. Il n\'y a plus qu\'à dire ce que tu en penses — ça prend 5 minutes, sur le canapé, à la pause dej, ou même sur le pot.</p>'
+    +'<p class="standfirst">Neuf maisons disponibles sur les dates exactes, toutes au budget, toutes vérifiées une par une. Il n\'y a plus qu\'à dire ce que tu en penses — ça prend 5 minutes, sur le canapé, à la pause dej, ou même sur le pot.</p>'
     +'<dl class="brief">'
     +'<div><dt>Dates</dt><dd>30 déc → 2 jan</dd></div>'
     +'<div><dt>Le groupe</dt><dd>9 adultes · 6 enfants · 1 bébé</dd></div>'
     +'<div><dt>Budget</dt><dd>4 000 – 4 400 €<small>~150 €/adulte/nuit, tolérance 10 %</small></dd></div>'
-    +'<div><dt>Maisons</dt><dd>14 à départager</dd></div>'
+    +'<div><dt>Maisons</dt><dd>9 à départager</dd></div>'
     +'</dl></header>';
 
   if(!me){
