@@ -511,7 +511,7 @@ var ALL_HOUSES = [
    flag:"Reste 3 salles de bain et une capacité totale de 15 : aucune marge.",
    prev:"Sympa, un peu juste niveau couchages, il y a un « espace dortoir » pour 3 solos aussi" },
 
- { id:'cinqmars', n:13, name:"La maison de la Loire", src:'gdc',
+ { id:'cinqmars', drop:true, n:13, name:"La maison de la Loire", src:'gdc',
    url:"https://gensdeconfiance.com/fr/ui/post/vacations__rentals/c94872c9-741d-4688-a25e-8df743a63a90",
    commune:"Cinq-Mars-la-Pile (37)", km:273, lat:47.35, lng:0.45, rating:"5,0",
    price:"3 932 €", per:"146 € / adulte / nuit", sort:3932, band:3,
@@ -542,7 +542,7 @@ var ALL_HOUSES = [
    tags:[['Sauna privé','spa'],["Jacuzzi · toute l'année",'spa'],['Salle de sport','spa'],['Piscine chauffée en saison',''],['Cheminée','hot'],['Ping-pong','']],
    flag:"Trois salles de bain pour seize personnes, et la note la plus basse de la sélection à 4,77." },
 
- { id:'sylvains', n:16, name:"La chaumière du Val d'Iton", src:'gdc',
+ { id:'sylvains', drop:true, n:16, name:"La chaumière du Val d'Iton", src:'gdc',
    url:"https://gensdeconfiance.com/fr/ui/post/vacations__rentals/04fa9e42-0d38-4e3c-bc82-b089d3667c9c",
    commune:"Sylvains-lès-Moulins (27)", km:118, lat:48.92, lng:1.06, rating:"5,0",
    price:"2 044 €", per:"76 € / adulte / nuit", sort:2044, band:1,
@@ -1146,12 +1146,12 @@ function renderBody(){
   var s='<div class="wrap">';
   s+='<header><div class="eyebrow">30 décembre 2026 → 2 janvier 2027 · 3 nuits</div>'
     +'<h1>On part <em>où</em> ?</h1>'
-    +'<p class="standfirst">Seize maisons disponibles sur les dates exactes, toutes au budget, toutes vérifiées une par une. Il n\'y a plus qu\'à dire ce que tu en penses — ça prend 5 minutes, sur le canapé, à la pause dej, ou même sur le pot.</p>'
+    +'<p class="standfirst">Quatorze maisons disponibles sur les dates exactes, toutes au budget, toutes vérifiées une par une. Il n\'y a plus qu\'à dire ce que tu en penses — ça prend 5 minutes, sur le canapé, à la pause dej, ou même sur le pot.</p>'
     +'<dl class="brief">'
     +'<div><dt>Dates</dt><dd>30 déc → 2 jan</dd></div>'
     +'<div><dt>Le groupe</dt><dd>9 adultes · 6 enfants · 1 bébé</dd></div>'
     +'<div><dt>Budget</dt><dd>4 000 – 4 400 €<small>~150 €/adulte/nuit, tolérance 10 %</small></dd></div>'
-    +'<div><dt>Maisons</dt><dd>16 à départager</dd></div>'
+    +'<div><dt>Maisons</dt><dd>14 à départager</dd></div>'
     +'</dl></header>';
 
   if(!me){
