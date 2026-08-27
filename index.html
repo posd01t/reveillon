@@ -254,6 +254,11 @@ body.dragging-rank{user-select:none;-webkit-user-select:none}
 
 /* --- verdict --- */
 .verdict{display:flex;flex-direction:column;gap:16px}
+#verdictzone{scroll-margin-top:20px;border-radius:3px}
+#verdictzone.needs{outline:2px solid var(--accent);outline-offset:10px;
+  animation:needs 1.1s ease-in-out 2}
+@keyframes needs{50%{outline-offset:4px}}
+.section-head .count.todo{color:var(--accent);font-weight:600}
 .reasons{display:flex;gap:8px;flex-wrap:wrap}
 .rbtn{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.06em;
   text-transform:uppercase;background:var(--ground);color:var(--ink-2);
@@ -1180,7 +1185,8 @@ function renderBody(){
   s+='<p class="rankhint">Attrape une ligne par les points à gauche pour la déplacer — ou sers-toi des flèches.</p>';
   s+='<div id="rankzone">'+rankHTML()+'</div>';
 
-  s+='<div class="section-head"><span class="step">Étape 3</span><h2>Ton verdict</h2></div>';
+  s+='<div class="section-head"><span class="step">Étape 3</span><h2>Ton verdict</h2>'
+    +'<span class="count" id="vcount"></span></div>';
   s+='<p class="section-note">La question la plus utile : est-ce que cette sélection te donne envie, ou est-ce qu\'il faut qu\'on cherche autre chose ?</p>';
   s+='<div id="verdictzone">'+verdictHTML()+'</div>';
 
@@ -1209,7 +1215,9 @@ function setStatus(msg){
   var el=document.getElementById('status'); if(!el) return;
   if(msg){ el.innerHTML=msg; return; }
   var v=myVotes(), done=HOUSES.filter(function(h){return v[h.id]}).length;
+  var noVerdict = done>0 && !((myV().verdict||{}).v);
   el.innerHTML='<b>'+done+'</b> / '+HOUSES.length+' maisons triées'
+    + (noVerdict ? ' · <b>avis global à donner</b>' : '')
     + (dirty ? ' — <b>pense à enregistrer</b>' : done? ' — enregistré' : '');
 }
 
@@ -1235,6 +1243,10 @@ function repaint(zone){
   var cnt=document.querySelectorAll('.section-head .count');
   if(cnt[0]){ var v=myVotes(); cnt[0].textContent=HOUSES.filter(function(h){return v[h.id]}).length+' / '+HOUSES.length; }
   if(cnt[1]){ var k=keptIds().length; cnt[1].textContent=k+' retenue'+(k>1?'s':''); }
+  var vc=document.getElementById('vcount');
+  if(vc){ var got=!!((myV().verdict||{}).v);
+    vc.textContent = got ? 'répondu' : 'à répondre';
+    vc.className = 'count'+(got?'':' todo'); }
 }
 
 function full(){ document.getElementById('root').innerHTML=renderBody(); bind(); setStatus(); }
@@ -1269,7 +1281,9 @@ function onClick(e){
 
   var vd=t.closest('[data-verdict]');
   if(vd){ var m3=ensureMe(); m3.verdict=m3.verdict||{};
-    m3.verdict.v=vd.getAttribute('data-verdict'); touch(); repaint('verdict'); return; }
+    m3.verdict.v=vd.getAttribute('data-verdict');
+    var vz=document.getElementById('verdictzone'); if(vz) vz.classList.remove('needs');
+    touch(); repaint('verdict'); return; }
 
   var rb=t.closest('[data-reason]');
   if(rb){ var m4=ensureMe(); m4.verdict=m4.verdict||{}; m4.verdict.reasons=m4.verdict.reasons||[];
@@ -1434,9 +1448,25 @@ function formBody(){
   return p;
 }
 
+/* Un votant a rempli les 17 maisons puis tapé « Enregistrer » depuis la barre
+   collante sans jamais descendre jusqu'à l'étape 3 — et c'est la réponse la
+   plus utile des trois. Le premier envoi sans avis global l'emmène donc à la
+   question ; le deuxième part quand même, on ne bloque personne. */
+var verdictNudged = false;
+
+function flagVerdict(){
+  var vz=document.getElementById('verdictzone'); if(!vz) return;
+  vz.classList.add('needs');
+  vz.scrollIntoView({behavior:'smooth',block:'center'});
+  setStatus('Il manque <b>ton avis global</b> — la question la plus utile des trois, '
+    +'juste au-dessus. Réponds-y, ou retape « Enregistrer » pour envoyer sans.');
+}
+
 function save(){
   var btn=document.getElementById('save');
   ensureMe(); persistLocal();
+
+  if(!((myV().verdict||{}).v) && !verdictNudged){ verdictNudged=true; flagVerdict(); return; }
 
   if(!CFG.FORM_ACTION){
     dirty=false;
@@ -1450,7 +1480,8 @@ function save(){
     .then(function(){
       dirty=false; btn.disabled=false;
       try{ localStorage.setItem('vote-envoye',String(Date.now())); }catch(e){}
-      setStatus('<b>Envoyé.</b> Merci ' + esc(me) + ' — tu peux fermer, ou revenir modifier et renvoyer.');
+      setStatus('<b>Envoyé.</b> Merci ' + esc(me) + ' — tu peux fermer, ou revenir modifier et renvoyer.'
+        + (((myV().verdict||{}).v) ? '' : ' <b>Ton avis global reste vide</b> : réponds-y et renvoie, ça compte.'));
       loadOthers(true);
     },function(){
       btn.disabled=false;
