@@ -169,6 +169,18 @@ h2{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:1.45re
 .pierre b{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.13em;
   text-transform:uppercase;color:var(--gold);display:block;margin-bottom:2px;font-weight:600}
 
+/* --- la famille d'Avignon en plus --- */
+.plus4{display:grid;grid-template-columns:auto 1fr;gap:9px;align-items:start;
+  margin-top:11px;padding:9px 12px;border-radius:2px;font-size:.93rem;line-height:1.45;
+  background:var(--surface-2);color:var(--ink-2)}
+.plus4 .mark{font-family:"IBM Plex Mono",monospace;font-weight:600;line-height:1.5}
+.plus4 b{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.11em;
+  text-transform:uppercase;font-weight:600;display:block;margin-bottom:2px}
+.plus4 em{font-style:normal;color:var(--ink-3)}
+.plus4.part{background:transparent;border:1.5px solid var(--gold);color:var(--ink)}
+.plus4.part .mark,.plus4.part b{color:var(--gold)}
+.plus4.no .mark{color:var(--ink-3)}
+
 /* --- couchages --- */
 .sleep-scroll{overflow-x:auto;margin:0 -22px;padding:2px 22px 6px;scroll-snap-type:x proximity}
 .bedcards{display:flex;gap:10px;min-width:min-content}
@@ -376,7 +388,20 @@ try { var so = localStorage.getItem('vote-voir'); if(so !== null) showOthers = (
 
 var PIERRE = {
  boislandry:"Moins stylé, mais moins cher que les autres avec piscine intérieure.",
- annay:"La même maison est aussi sur Airbnb, 414 € plus cher. On réserverait côté Gens de Confiance."
+};
+
+/* Capacité maximale relevée sur chaque annonce, et ce que ça donne si la
+   famille d'Avignon vient (2 adultes + 2 enfants en plus, soit 19 voyageurs
+   comptés — le bébé de deux ans ne compte pas dans les plafonds Airbnb). */
+var PLUS4 = {
+ chateaulandon:{cap:16, ok:'part',
+   txt:"Possible : jusqu'à 22 couchages sur le domaine en louant une annexe en supplément (15 pour le moulin seul).",
+   prix:"Prix de l'annexe non publié — à demander à l'hôte."},
+ esternay:{cap:15, ok:'no', txt:"Non : l'annonce plafonne à 15 voyageurs, vous êtes déjà 15 plus le bébé."},
+ boislandry:{cap:15, ok:'no', txt:"Non : l'annonce plafonne à 15 voyageurs, vous êtes déjà 15 plus le bébé."},
+ gueleger:{cap:15, ok:'no', txt:"Non : l'annonce plafonne à 15 voyageurs, vous êtes déjà 15 plus le bébé."},
+ pasdejeu:{cap:15, ok:'no', txt:"Non : l'annonce plafonne à 15 voyageurs, vous êtes déjà 15 plus le bébé."},
+ stmartin:{cap:17, ok:'no', txt:"Non : 17 voyageurs annoncés, il en faudrait 19."}
 };
 
 var REASONS = ["trop cher","trop loin","pas assez beau","couchages trop justes","pas assez d'équipements","mauvaises dates"];
@@ -432,7 +457,7 @@ var ALL_HOUSES = [
    flag:"Le détail chambre par chambre n'est toujours pas publié. À demander à l'hôte.",
    prev:"C'est la piscine qui joue beaucoup. Les couchages sont peut-être un peu juste" },
 
- { id:'belvaudiere', n:6, name:"Domaine de la Belvaudière", src:'airbnb',
+ { id:'belvaudiere', drop:true, n:6, name:"Domaine de la Belvaudière", src:'airbnb',
    url:"https://www.airbnb.fr/rooms/857799814932527229?check_in=2026-12-30&check_out=2027-01-02&adults=9&children=6&infants=1",
    commune:"Saint-Pavace (72)", km:229, lat:48.03, lng:0.22, rating:"5,0",
    price:"4 160 €", per:"154 € / adulte / nuit", sort:4160, band:3,
@@ -485,7 +510,7 @@ var ALL_HOUSES = [
    flag:"Ton « s'il y avait un extra ce serait 5 étoiles » reste sans réponse : il n'y en a pas.",
    prev:"Sympa. Ça dit 2 642 € sur le site quand tu rentres les dates. S'il y avait un extra (sauna ou équivalent) ça serait potentiellement 5 étoiles. Je me demande juste si le salon est assez grand pour les kids pour jouer mais c'est ok" },
 
- { id:'annay', n:11, name:"Le Moulin d'Annay-sur-Serein", src:'gdc',
+ { id:'annay', drop:true, n:11, name:"Le Moulin d'Annay-sur-Serein", src:'gdc',
    url:"https://gensdeconfiance.com/fr/ui/post/vacations__rentals/84103643-14c3-45a6-9d5e-fa0c2fcd261d",
    commune:"Annay-sur-Serein (89)", km:216, lat:47.77, lng:3.90, rating:"5,0",
    price:"2 665 €", per:"99 € / adulte / nuit", sort:2665, band:2, was:"annoncé ~1 950 €",
@@ -528,7 +553,7 @@ var ALL_HOUSES = [
    flag:"Pas d'extra, et pas de cheminée mentionnée. C'est la moins chère, et ça se sent.",
    prev:"Rien de trop spécifique à remonter…" },
 
- { id:'fertegaucher', n:15, name:"La maison de La Ferté-Gaucher", src:'airbnb', star:true,
+ { id:'fertegaucher', drop:true, n:15, name:"La maison de La Ferté-Gaucher", src:'airbnb', star:true,
    url:"https://www.airbnb.fr/rooms/1603696577945367676?check_in=2026-12-30&check_out=2027-01-02&adults=9&children=6&infants=1",
    commune:"La Ferté-Gaucher (77)", km:88, lat:48.78, lng:3.31, rating:"4,77",
    price:"3 975 €", per:"147 € / adulte / nuit", sort:3975, band:1,
@@ -1024,7 +1049,12 @@ function houseHTML(h){
     +(sl.tally?'<span class="tally">'+sl.tally+'</span>':'')+'</div>';
   if(sup.bld) s+='<div class="bld'+(/^[2-9]/.test(sup.bld)?' multi':'')+'">'+esc(sup.bld)
     +(sup.bldx?'<span>'+esc(sup.bldx)+'</span>':'')+'</div>';
-  s+=sl.html+'</div>';
+  s+=sl.html;
+  var p4=PLUS4[h.id];
+  if(p4) s+='<div class="plus4 '+p4.ok+'"><span class="mark">'+(p4.ok==='part'?'◐':'○')+'</span>'
+    +'<span><b>Si la famille d\'Avignon vient (+4)</b> '+esc(p4.txt)
+    +(p4.prix?' <em>'+esc(p4.prix)+'</em>':'')+'</span></div>';
+  s+='</div>';
 
   s+='<div class="block"><div class="blabel"><span class="step">02</span><span>Les distances</span>'
     +'<span class="tally">temps de trajet calculés sur le réseau routier</span></div>'+distHTML(h)
@@ -1142,12 +1172,12 @@ function renderBody(){
   var s='<div class="wrap">';
   s+='<header><div class="eyebrow">30 décembre 2026 → 2 janvier 2027 · 3 nuits</div>'
     +'<h1>On part <em>où</em> ?</h1>'
-    +'<p class="standfirst">Neuf maisons disponibles sur les dates exactes, toutes au budget, toutes vérifiées une par une. Il n\'y a plus qu\'à dire ce que tu en penses — ça prend 5 minutes, sur le canapé, à la pause dej, ou même sur le pot.</p>'
+    +'<p class="standfirst">Six maisons disponibles sur les dates exactes, toutes au budget, toutes vérifiées une par une. Il n\'y a plus qu\'à dire ce que tu en penses — ça prend 5 minutes, sur le canapé, à la pause dej, ou même sur le pot.</p>'
     +'<dl class="brief">'
     +'<div><dt>Dates</dt><dd>30 déc → 2 jan</dd></div>'
     +'<div><dt>Le groupe</dt><dd>9 adultes · 6 enfants · 1 bébé</dd></div>'
     +'<div><dt>Budget</dt><dd>4 000 – 4 400 €<small>~150 €/adulte/nuit, tolérance 10 %</small></dd></div>'
-    +'<div><dt>Maisons</dt><dd>9 à départager</dd></div>'
+    +'<div><dt>Maisons</dt><dd>6 à départager</dd></div>'
     +'</dl></header>';
 
   if(!me){
