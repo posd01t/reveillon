@@ -486,23 +486,31 @@ var ALL_HOUSES = [
        c = canapé-lit, b = lit bébé. Absent = non publié par l'annonce. ---- */
 var BEDS = {
  piffonds:{r:[
-   {g:"1ère maison",n:"Chambres 1 à 5",b:[],x:"12 couchages · 2 salles de bain"},
-   {g:"2e maison",n:"Chambres 6 à 8",b:[],x:"12 couchages · 3 salles de bain"}],
-   gx:{"1ère maison":"salle à manger de 24 places, cuisine équipée avec chambre froide",
-       "2e maison":"le complément, face à la première"},
+   {g:"1ère maison",n:"Chambre 1",b:[]},{g:"1ère maison",n:"Chambre 2",b:[]},
+   {g:"1ère maison",n:"Chambre 3",b:[]},{g:"1ère maison",n:"Chambre 4",b:[]},
+   {g:"1ère maison",n:"Chambre 5",b:[]},
+   {g:"2e maison",n:"Chambre 6",b:[]},{g:"2e maison",n:"Chambre 7",b:[]},
+   {g:"2e maison",n:"Chambre 8",b:[]}],
+   gx:{"1ère maison":"12 couchages · 2 salles de bain · salle à manger de 24 places, cuisine équipée avec chambre froide",
+       "2e maison":"12 couchages · 3 salles de bain, face à la première"},
    plus:"24 couchages annoncés mais 18 lits comptés par Airbnb — la répartition exacte est à demander."},
 
  etoges:{r:[
    {n:"Chambre 1",b:[["s",2]]},
    {n:"Chambre 2",b:[["d",1]],x:"lit king size"},
    {n:"Chambre 3",b:[["d",1]],x:"lit king size"},
-   {n:"Chambres 4 à 8",b:[]}],
-   plus:"8 chambres et 23 lits en tout, 3 salles de bain — seules trois chambres sont détaillées, le reste est à demander."},
+   {n:"Chambre 4",b:[]},{n:"Chambre 5",b:[]},{n:"Chambre 6",b:[]},
+   {n:"Chambre 7",b:[]},{n:"Chambre 8",b:[]}],
+   plus:"23 lits en tout et 3 salles de bain — seules trois chambres sont détaillées, le reste est à demander."},
 
  bretoncelles:{r:[
-   {g:"Maison principale",n:"Chambre 1 · RDC",b:[["d",1]]},
-   {g:"Maison principale",n:"Chambres 2 à 5",b:[],x:"à l'étage"},
-   {g:"La petite maison",n:"Chambres 6 et 7",b:[]}],
+   {g:"Maison principale",n:"Chambre 1",b:[["d",1]],x:"rez-de-chaussée"},
+   {g:"Maison principale",n:"Chambre 2",b:[],x:"étage"},
+   {g:"Maison principale",n:"Chambre 3",b:[],x:"étage"},
+   {g:"Maison principale",n:"Chambre 4",b:[],x:"étage"},
+   {g:"Maison principale",n:"Chambre 5",b:[],x:"étage"},
+   {g:"La petite maison",n:"Chambre 6",b:[]},
+   {g:"La petite maison",n:"Chambre 7",b:[]}],
    gx:{"Maison principale":"200 m² · espace de vie avec coin jeu (80 m²) · 2 salles de bain",
        "La petite maison":"salon-kitchenette, 2 salles de douche et le sauna infrarouge"},
    plus:"18 places au total — il en faut 19 : à négocier avec l'hôte."},
@@ -510,19 +518,24 @@ var BEDS = {
  chaumontst:{r:[],plus:"12 chambres et 22 couchages sur deux bâtiments — répartition non publiée (le château seul est limité à 15 personnes)."},
 
  vouzon:{r:[
-   {g:"Maison principale",n:"Chambres 1 à 3",b:[["d",2]],x:"4 personnes chacune"},
+   {g:"Maison principale",n:"Chambre 1",b:[["d",2]],x:"4 personnes"},
+   {g:"Maison principale",n:"Chambre 2",b:[["d",2]],x:"4 personnes"},
+   {g:"Maison principale",n:"Chambre 3",b:[["d",2]],x:"4 personnes"},
    {g:"Maison principale",n:"Chambre 4",b:[["d",1]]},
    {g:"Maison principale",n:"Appoint",b:[["c",1],["s",2]],x:"canapé-lit + 2 lits simples"},
-   {g:"L'annexe",n:"Chambre 5 · RDC",b:[["d",1],["c",1]],x:"2-3 pers · sdb privative"},
-   {g:"L'annexe",n:"Chambres 6 et 7",b:[["d",1],["c",1]],x:"4 personnes chacune"}],
+   {g:"L'annexe",n:"Chambre 5",b:[["d",1],["c",1]],x:"RDC · 2-3 pers · sdb privative"},
+   {g:"L'annexe",n:"Chambre 6",b:[["d",1],["c",1]],x:"4 personnes"},
+   {g:"L'annexe",n:"Chambre 7",b:[["d",1],["c",1]],x:"4 personnes"}],
    plus:"Jusqu'à 30 couchages — beaucoup passent par des lits doubles partagés et des canapés-lits : bien pour les enfants, à répartir pour les adultes."},
 
  champscorons:{r:[],plus:"9 chambres, 28 lits, 3 salles de bain — la répartition n'est pas publiée."},
 
  vrin:{r:[
-   {g:"Le moulin",n:"Chambres 1 à 6",b:[["d",1]],x:"un grand lit double chacune, matelas à mémoire de forme"},
+   {g:"Le moulin",n:"Chambre 1",b:[["d",1]]},{g:"Le moulin",n:"Chambre 2",b:[["d",1]]},
+   {g:"Le moulin",n:"Chambre 3",b:[["d",1]]},{g:"Le moulin",n:"Chambre 4",b:[["d",1]]},
+   {g:"Le moulin",n:"Chambre 5",b:[["d",1]]},{g:"Le moulin",n:"Chambre 6",b:[["d",1]]},
    {g:"Le moulin",n:"Chambre 7 · dortoir",b:[["u",2]],x:"2 lits superposés (4 places)"}],
-   gx:{"Le moulin":"salon avec cheminée, bibliothèque · 5 salles d'eau + 6 WC"},
+   gx:{"Le moulin":"grands lits doubles, matelas à mémoire de forme · salon avec cheminée, bibliothèque · 5 salles d'eau + 6 WC"},
    plus:"17 couchages annoncés, « jusqu'à 30 sur demande » avec la seconde maison — le 19e couchage est à confirmer avec l'hôte."}
 };
 
