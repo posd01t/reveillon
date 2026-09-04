@@ -8,7 +8,7 @@
      tel quel, donc elle doit être écrite ici. -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
-<title>On part où ?</title>
+<title>On repart où ? · à 19</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
@@ -385,570 +385,171 @@ if(!state.voters) state.voters = {};
 var loadingOthers = false, othersError = false;
 
 var me = null, showOthers = null, dirty = false;
-try { me = localStorage.getItem('vote-nom') || null; } catch(e){}
-try { var so = localStorage.getItem('vote-voir'); if(so !== null) showOthers = (so === '1'); } catch(e){}
+try { me = localStorage.getItem('vote19-nom') || null; } catch(e){}
+try { var so = localStorage.getItem('vote19-voir'); if(so !== null) showOthers = (so === '1'); } catch(e){}
 
 var PIERRE = {
- boislandry:"Moins stylé, mais moins cher que les autres avec piscine intérieure.",
+ etoges:"Grave !",
+ vouzon:"Un peu juste niveau couchages, mais go.",
+ champscorons:"Manque un peu de charme, mais sympa.",
+ piffonds:"Pas trop de charme, mais moins chère.",
+ bretoncelles:"Un peu juste niveau place.",
+ vrin:"Nice."
 };
 
-/* Capacité maximale relevée sur chaque annonce, et ce que ça donne si la
-   famille d'Avignon vient (2 adultes + 2 enfants en plus, soit 19 voyageurs
-   comptés — le bébé de deux ans ne compte pas dans les plafonds Airbnb). */
+/* Si le couple en option vient avec sa fille de 10 ans : 21 personnes. */
 var PLUS4 = {
- chateaulandon:{cap:16, ok:'part',
-   txt:"Possible : jusqu'à 22 couchages sur le domaine en louant une annexe en supplément (15 pour le moulin seul).",
-   prix:"Prix de l'annexe non publié — à demander à l'hôte."},
- esternay:{cap:15, ok:'no', txt:"Non : l'annonce plafonne à 15 voyageurs, vous êtes déjà 15 plus le bébé."},
- boislandry:{cap:15, ok:'no', txt:"Non : l'annonce plafonne à 15 voyageurs, vous êtes déjà 15 plus le bébé."},
- gueleger:{cap:15, ok:'no', txt:"Non : l'annonce plafonne à 15 voyageurs, vous êtes déjà 15 plus le bébé."},
- pasdejeu:{cap:15, ok:'no', txt:"Non : l'annonce plafonne à 15 voyageurs, vous êtes déjà 15 plus le bébé."},
- stmartin:{cap:17, ok:'no', txt:"Non : 17 voyageurs annoncés, il en faudrait 19."}
+ bretoncelles:{cap:18, ok:'no', txt:"Non : 18 places, il en manque déjà une à 19 — à 21 il en manquerait trois."},
+ vrin:{cap:17, ok:'part', txt:"Possible : « jusqu'à 30 couchages sur demande » — à valider avec l'hôte, comme le passage à 19."},
+ piffonds:{cap:24, ok:'part', txt:"Les 24 couchages y sont, mais 18 vrais lits annoncés : à préciser avec l'hôte."}
 };
 
 /* Date du dernier relevé des prix sur les annonces. Le Moulin de
    Château-Landon est passé de 4 400 à 5 000 € en quatre jours sans que rien
    ne le signale : les prix portent désormais leur date. */
-var RELEVE = "30 août";
+var RELEVE = "3 sept.";
 
 var REASONS = ["trop cher","trop loin","pas assez beau","couchages trop justes","pas assez d'équipements","mauvaises dates"];
 var ALL_HOUSES = [
- { id:'chateaulandon', n:1, name:"Le Moulin de Château-Landon", src:'airbnb', star:true,
-   url:"https://www.airbnb.fr/rooms/1122978102638869895?check_in=2026-12-30&check_out=2027-01-02&adults=9&children=6&infants=1",
-   commune:"Château-Landon (77)", km:105, lat:48.15, lng:2.70, rating:"5,0",
-   price:"5 000 €", per:"185 € / adulte / nuit", sort:5000, band:1,
-   extra:'yes', extraTxt:"Piscine privative 10 × 5 m, couverte et chauffée, OUVERTE TOUTE L'ANNÉE. Vérifié dans le texte de l'annonce.",
-   rooms:"7 chambres · 13 lits · 4 salles de bain\nCh. 1 : lit double + sdb attenante · Ch. 2 : 2 lits simples · Ch. 3, 4, 5, 6 : lit double\nCh. 7 : lit queen + lit simple, sdb attenante · Annexe en supplément → jusqu'à 22 couchages",
-   desc:"Un moulin dont le <strong>mécanisme d'origine est resté apparent</strong> dans la pièce de vie, avec poêle à bois pour les soirées d'hiver. Six chambres à lit double ou queen : les 3 couples et les 3 solos ont chacun leur porte, et la chambre 2 fait le dortoir enfants. Billard, salle de jeux pour enfants, ping-pong, jeux de société. Parc et étang.",
-   tags:[["Piscine couverte chauffée · toute l'année",'spa'],['Poêle à bois','hot'],['Billard',''],['Salle de jeux enfants',''],['Ping-pong','']],
-   flag:"Pile au plafond : 4 400 €. L'annexe pour la famille d'Avignon est facturée en supplément." },
+ { id:'piffonds', n:1, name:"La Lézardière", src:'airbnb',
+   url:"https://www.airbnb.fr/rooms/53059240?check_in=2026-12-30&check_out=2027-01-02&adults=11&children=8&infants=1",
+   commune:"Piffonds (89)", km:124, lat:47.97, lng:3.13, rating:"4,66",
+   price:"4 037 €", per:"122 € / adulte / nuit", sort:4037, band:1,
+   extra:'yes', extraTxt:"Sauna privatif, dans l'une des cinq salles de bain. Vérifié dans le texte de l'annonce.",
+   rooms:"2 maisons · 8 chambres · 5 salles de bain · 24 couchages annoncés",
+   desc:"Longère de campagne aux volets bleus, dans l'Yonne. <strong>Deux maisons de 12 couchages</strong>, une salle à manger de 24 places pour dîner tous ensemble, billard, baby-foot — et un sauna dans l'une des salles de bain. Guirlandes dans le jardin pour le soir du 31.",
+   tags:[["Sauna",'spa'],["Salle à manger 24 places",''],["Billard · baby-foot",'']],
+   flag:"La cheminée est signalée non fonctionnelle par l'annonce, et 18 lits sont annoncés pour 24 couchages : détail à demander." },
 
- { id:'lorris', drop:true, n:2, name:"La maison de charme et sa grange", src:'gdc', star:true,
-   url:"https://gensdeconfiance.com/fr/ui/post/vacations__rentals/bcadafaa-2e1c-434c-a198-481746e95ad8",
-   commune:"Lorris (45)", km:135, lat:47.89, lng:2.51, rating:"5,0",
-   price:"2 363 €", per:"88 € / adulte / nuit", sort:2363, band:1, was:"annoncé ~2 100 €",
-   extra:'yes', extraTxt:"Espace sauna + salle de sport avec douche dans la grange. Tu l'avais vu, je l'avais raté.",
-   rooms:"8 chambres au total sur deux bâtiments\nMaison : 1 ch. au RDC avec salle d'eau et WC · 4 ch. à l'étage · 2 salles d'eau\nGrange attenante : 3 ch. à l'étage · 1 salle de bain",
-   desc:"La grange n'est pas une dépendance mais une seconde maison : cuisine au rez-de-chaussée, <strong>espace sauna et salle de sport avec douche</strong>, et à l'étage une salle de jeux avec <strong>billard, babyfoot et home cinéma</strong>. Dans la maison, vaste cuisine-salle à manger-séjour avec cheminée, bibliothèque et salon TV à part. Deux hectares, et toutes les commodités à pied.",
-   tags:[['Sauna','spa'],['Salle de sport','spa'],['Cheminée au séjour','hot'],['Billard · babyfoot · home cinéma',''],['Commerces à pied',''],['Piscine','']],
-   flag:"Piscine non chauffée, sans intérêt en décembre. Répartition exacte des lits à demander." },
+ { id:'etoges', n:2, name:"Le Grand Gîte d'Étoges", src:'airbnb', star:true,
+   url:"https://www.airbnb.fr/rooms/1624110091007929971?check_in=2026-12-30&check_out=2027-01-02&adults=11&children=8&infants=1",
+   commune:"Étoges (51)", km:123, lat:48.88, lng:3.85, rating:"5,0",
+   price:"4 611 €", per:"140 € / adulte / nuit", sort:4611, band:1,
+   extra:'yes', extraTxt:"Piscine intérieure de 9 × 5 chauffée à 30°C, accessible toute l'année, plus un sauna privé. Vérifié dans le texte ET la liste d'équipements.",
+   rooms:"8 chambres · 23 lits · 3 salles de bain · ~25 personnes",
+   desc:"Au milieu des vignes de Champagne, à vingt minutes d'Épernay. <strong>Piscine intérieure chauffée à 30° toute l'année</strong>, sauna, cheminée au salon, véranda, salle de jeux. La maison de la sélection qui coche le plus de cases de l'hiver.",
+   tags:[["Piscine intérieure 30° · toute l'année",'spa'],["Sauna",'spa'],["Cheminée",'hot'],["Salle de jeux",''],["Vignoble à la porte",'']],
+   flag:"Loin pour Toulouse (8h42) et Avignon (7h18) — c'est son vrai défaut. Détail des chambres partiellement publié." },
 
- { id:'gueleger', n:3, name:"Le Gué Léger", src:'airbnb', star:true,
-   url:"https://www.airbnb.fr/rooms/879410232948559691?check_in=2026-12-30&check_out=2027-01-02&adults=9&children=6&infants=1",
-   commune:"Chanceaux-près-Loches (37)", km:273, lat:47.19, lng:1.06, rating:"4,98",
-   price:"3 935 €", per:"146 € / adulte / nuit", sort:3935, band:3,
-   extra:'yes', extraTxt:"Sauna privatif 6 personnes ET jacuzzi privatif 5 personnes, tous deux disponibles toute l'année. Piscine chauffée de mars à novembre.",
-   rooms:"7 chambres · 9 lits · 5 salles de bain\n6 chambres spacieuses avec lit Queen Size\n1 chambre avec lit simple et lit superposé",
-   desc:"Le paquet complet, et la meilleure note de toute la recherche. <strong>Six chambres en lit queen</strong> — trois couples, trois solos, chacun chez soi — plus une chambre enfants. Sauna et jacuzzi privatifs, cheminée et poêles à granulés, billard, salle de jeux pour enfants. 400 m² habitables, 1 500 m² de jardin, la maison la plus proche à 500 m.",
-   tags:[['Sauna privatif','spa'],["Jacuzzi · toute l'année",'spa'],['Piscine chauffée mars-nov','spa'],['Cheminée + poêles granulés','hot'],['Billard',''],['Salle de jeux enfants','']],
-   flag:"273 km, soit 3h de Paris. C'est le prix à payer pour tout avoir." },
+ { id:'bretoncelles', n:3, name:"Les deux maisons de Bretoncelles", src:'airbnb',
+   url:"https://www.airbnb.fr/rooms/12824072?check_in=2026-12-30&check_out=2027-01-02&adults=11&children=8&infants=1",
+   commune:"Bretoncelles (61)", km:143, lat:48.43, lng:0.88, rating:null,
+   price:"2 285 €", per:"69 € / adulte / nuit", sort:2285, band:2,
+   extra:'yes', extraTxt:"Sauna infrarouge dans la seconde maison. Vérifié dans le texte de l'annonce.",
+   rooms:"2 maisons · 7 chambres · 18 places",
+   desc:"Deux maisons dans le Perche sur deux hectares : la principale (5 chambres, espace de vie avec coin jeu de 80 m²) et la petite (2 chambres) avec son <strong>sauna infrarouge</strong>. De très loin la moins chère de la sélection.",
+   tags:[["Sauna infrarouge",'spa'],["2 hectares",''],["Coin jeu 80 m²",'']],
+   flag:"18 places pour 19 : le couchage manquant est à négocier avec l'hôte avant tout." },
 
- { id:'esternay', n:4, name:"La ferme d'Esternay", src:'airbnb',
-   url:"https://www.airbnb.fr/rooms/14849634?check_in=2026-12-30&check_out=2027-01-02&adults=9&children=6&infants=1",
-   commune:"Esternay (51)", km:112, lat:48.73, lng:3.56, rating:"4,87",
-   price:"4 391 €", per:"163 € / adulte / nuit", sort:4391, band:1,
-   extra:'yes', extraTxt:"Piscine intérieure privée chauffée à 30°, disponible toute l'année, plus un jacuzzi privé. Confirmé par la liste d'équipements ET le texte.",
-   rooms:"7 chambres · 8 lits · 3 salles de bain",
-   desc:"Un gîte à la ferme en pierres, poutres et pavés. <strong>Piscine intérieure chauffée à 30° toute l'année et jacuzzi privé</strong> — avec Le Moulin, c'est la seule vraie baignade de la sélection en plein hiver. Cheminée à bois, salle de jeux pour enfants, aire de jeux extérieure, ping-pong. À l'est, du côté de Provins et des caves de Champagne.",
-   tags:[["Piscine intérieure 30° · toute l'année",'spa'],['Jacuzzi privé','spa'],['Cheminée bois','hot'],['Salle de jeux enfants',''],['Aire de jeux','']],
-   flag:"Seulement 8 lits annoncés pour 7 chambres, et 3 salles de bain. À faire préciser avant tout : c'est le point faible." },
-
- { id:'boislandry', n:5, name:"La Grande Maison du Bois Landry", src:'airbnb',
-   url:"https://www.airbnb.fr/rooms/656271025725751282?check_in=2026-12-30&check_out=2027-01-02&adults=9&children=6&infants=1",
-   commune:"Champrond-en-Gâtine (28)", km:135, lat:48.40, lng:1.10, rating:"4,97",
-   price:"3 312 €", per:"123 € / adulte / nuit", sort:3312, band:1,
-   extra:'yes', extraTxt:"Piscine intérieure privée chauffée, disponible toute l'année.",
-   rooms:"7 chambres · 14 lits · 7 salles de bain",
-   desc:"Piscine intérieure chauffée toute l'année, cheminée ou poêle à bois, chauffage central. <strong>Sept salles de bain pour seize personnes</strong> — c'est la seule de la sélection où le matin du 1<sup>er</sup> janvier ne sera pas un embouteillage.",
-   tags:[["Piscine intérieure chauffée",'spa'],['Cheminée bois','hot'],['Chauffage central',''],['7 salles de bain','']],
-   flag:"Le détail chambre par chambre n'est toujours pas publié. À demander à l'hôte.",
-   prev:"C'est la piscine qui joue beaucoup. Les couchages sont peut-être un peu juste" },
-
- { id:'belvaudiere', drop:true, n:6, name:"Domaine de la Belvaudière", src:'airbnb',
-   url:"https://www.airbnb.fr/rooms/857799814932527229?check_in=2026-12-30&check_out=2027-01-02&adults=9&children=6&infants=1",
-   commune:"Saint-Pavace (72)", km:229, lat:48.03, lng:0.22, rating:"5,0",
-   price:"4 160 €", per:"154 € / adulte / nuit", sort:4160, band:3,
-   extra:'part', extraTxt:"Jacuzzi, et piscine chauffée sous abri amovible — l'abri rend l'hiver possible, mais l'annonce ne le garantit pas.",
-   rooms:"11 chambres · 8 salles de bain",
-   desc:"<strong>Onze chambres et huit salles de bain</strong> : la question du couchage ne se pose tout simplement pas, et il reste de la place pour la famille d'Avignon. Jacuzzi, cheminée à bois, chauffage central, billard, ping-pong, aire de jeux extérieure. Aux portes du Mans.",
-   tags:[['Jacuzzi','spa'],['Piscine chauffée sous abri','spa'],['Cheminée bois','hot'],['11 chambres',''],['Billard','']],
-   flag:"Confirmer que la piscine est bien ouverte fin décembre avant de se décider dessus." },
-
- { id:'annayairbnb', drop:true, n:7, name:"La maison au jacuzzi d'Annay", src:'airbnb',
-   url:"https://www.airbnb.fr/rooms/34890579?check_in=2026-12-30&check_out=2027-01-02&adults=9&children=6&infants=1",
-   commune:"Annay-sur-Serein (89)", km:216, lat:47.775, lng:3.905, rating:"4,83",
-   price:"3 079 €", per:"114 € / adulte / nuit", sort:3079, band:2,
-   extra:'yes', extraTxt:"Grand jacuzzi chauffé pour 8 à 10 personnes — assez large pour y tenir tous les adultes à la fois.",
-   rooms:"300 m² · 6 à 7 chambres · 11 lits · 2 salles de bain + WC\n1 ch. au RDC sur le jardin (lit double, WC et lavabo en suite)\n1 ch. à l'étage intermédiaire (lit double + lit enfant)\n3 ch. au 1er (2 lits doubles, 3 lits simples) · 1 ch. en mezzanine par échelle (lit double)",
-   desc:"Même village que le Moulin, autre maison. <strong>Cinq lits doubles</strong>, un grand jacuzzi chauffé, une cheminée, et surtout l'équipement bébé complet fourni : <strong>lit à barreaux, lit parapluie, chaise haute et jeux d'enfants</strong>. Salle de jeux en mezzanine. À vingt minutes de Noyers-sur-Serein.",
-   tags:[['Jacuzzi chauffé 8-10 pers.','spa'],['Cheminée','hot'],['Lit bébé + chaise haute',''],['Salle de jeux','']],
-   flag:"Deux salles de bain seulement, et une chambre accessible par échelle." },
-
- { id:'beaugency', drop:true, n:8, name:"Le gîte sauna et balnéo", src:'gdc',
-   url:"https://gensdeconfiance.com/fr/ui/post/vacations__rentals/3afba1ba-5da0-40e9-be69-deff6e497fcd",
-   commune:"Cravant, près de Beaugency (45)", km:163, lat:47.80, lng:1.58, rating:null,
-   price:"2 272 €", per:"84 € / adulte / nuit", sort:2272, band:2, was:"annoncé ~1 800 €",
-   train:"Gare de Beaugency à 10 minutes",
-   extra:'part', extraTxt:"Sauna, bain balnéo et salle de yoga : utilisables en décembre. La piscine chauffée, elle, est extérieure et ouverte de mai à septembre — tu avais raison.",
-   rooms:"Maison principale 200 m² · 6 chambres · 3 salles de bain\nCh. 1 : lit 160 + lit bébé · Ch. 2, 3, 4 : lit 160\nCh. 5 : 3 lits simples + 1 lit superposé · Ch. 6 (en enfilade de la 5) : 2 lits simples",
-   desc:"Refait à neuf en 2026 et pensé pour le bien-être : <strong>sauna, bain balnéo dans l'une des trois salles de bain, salle de yoga</strong>. Côté enfants, baby-foot, ping-pong, trampoline et jeux vidéo sur écran XXL. Les chambres 5 et 6 en enfilade font un vrai coin enfants. Leclerc drive et commerces à 10 minutes.",
-   tags:[['Sauna','spa'],['Bain balnéo','spa'],['Salle de yoga','spa'],['Trampoline',''],['Babyfoot','']],
-   flag:"Quatre lits doubles seulement : un des trois solos devra prendre une chambre enfants. Et c'est du neuf, pas de l'ancien.",
-   prev:"Why not. Piscine extérieure ouverte de mai à septembre, attention !" },
-
- { id:'montigny', drop:true, n:9, name:"La maison de Montigny", src:'airbnb',
-   url:"https://www.airbnb.fr/rooms/31345595?check_in=2026-12-30&check_out=2027-01-02&adults=9&children=6&infants=1",
-   commune:"Montigny-le-Chartif (28)", km:136, lat:48.30, lng:1.13, rating:"4,85",
-   price:"2 579 €", per:"96 € / adulte / nuit", sort:2579, band:1,
-   extra:'part', extraTxt:"Jacuzzi privé, utilisable toute l'année. La piscine est couverte et chauffée mais ouverte de mai à septembre seulement.",
-   rooms:"8 chambres · 9 lits\nCh. 4 et 5 : lit double + salle de bain privative avec baignoire\nCh. 7 : lit queen 160 · Ch. 8 : lit double en mezzanine ouverte sur la salle à manger",
-   desc:"Deux bâtiments côte à côte en « L » autour d'un saule. <strong>Huit chambres</strong> — le plus grand nombre de pièces séparées sous 2 600 € — dont deux avec salle de bain privative. Jacuzzi privé, ping-pong, jeux de société.",
-   tags:[['Jacuzzi privé','spa'],['8 chambres',''],['2 sdb privatives',''],['Ping-pong','']],
-   flag:"Peu de salles de bain annoncées, et la chambre 8 est une mezzanine ouverte sur la salle à manger — pas idéale pour un couple." },
-
- { id:'favril', drop:true, n:10, name:"La chaumière du Favril", src:'gdc',
-   url:"https://gensdeconfiance.com/fr/ui/post/vacations__rentals/6f74576d-f902-4999-86d0-8da4b6eff0c7",
-   commune:"Le Favril (28)", km:122, lat:48.36, lng:0.93, rating:"5,0",
-   price:"2 688 €", per:"100 € / adulte / nuit", sort:2688, band:1, was:"annoncé ~2 250 €",
-   extra:'none', extraTxt:"Aucun sauna ni jacuzzi dans le texte de l'annonce — je l'ai relue en entier. La piscine n'est pas chauffée.",
-   rooms:"9 chambres · 17 à 18 couchages\nMaison principale : 3 chambres, salon-salle à manger avec poêle et babyfoot\nMaison d'amis : 6 chambres, 1 bureau, 2 salles de bain",
-   desc:"Aux portes du Perche, entourée de champs, à trente minutes de Chartres. Neuf chambres sur deux maisons : c'est la configuration la plus confortable de la sélection, et <strong>le bois de cheminée est fourni</strong>. Capacité 18.",
-   tags:[['Cheminées + poêle','hot'],['Bois fourni',''],['Babyfoot',''],['Très grand jardin','']],
-   flag:"Ton « s'il y avait un extra ce serait 5 étoiles » reste sans réponse : il n'y en a pas.",
-   prev:"Sympa. Ça dit 2 642 € sur le site quand tu rentres les dates. S'il y avait un extra (sauna ou équivalent) ça serait potentiellement 5 étoiles. Je me demande juste si le salon est assez grand pour les kids pour jouer mais c'est ok" },
-
- { id:'annay', drop:true, n:11, name:"Le Moulin d'Annay-sur-Serein", src:'gdc',
-   url:"https://gensdeconfiance.com/fr/ui/post/vacations__rentals/84103643-14c3-45a6-9d5e-fa0c2fcd261d",
-   commune:"Annay-sur-Serein (89)", km:216, lat:47.77, lng:3.90, rating:"5,0",
-   price:"2 665 €", per:"99 € / adulte / nuit", sort:2665, band:2, was:"annoncé ~1 950 €",
-   extra:'yes', extraTxt:"Jacuzzi, utilisable toute l'année. Pas de sauna, et pas de cheminée mentionnée dans le texte non plus.",
-   rooms:"7 chambres · 17 voyageurs · 2 salles de bain · 3 WC",
-   desc:"Moulin à eau du 18<sup>e</sup> entièrement restauré : poutres apparentes, pierres de Bourgogne, grand salon aux immenses baies vitrées, cuisine haut de gamme. Cinq chambres à lit double, une chambre à trois lits simples, deux lits bébé fournis. Quinze minutes de Chablis, vingt de Noyers-sur-Serein. <strong>La même maison est aussi sur Airbnb, à 3 079 € — soit 414 € de plus pour exactement le même séjour.</strong>",
-   tags:[['Jacuzzi','spa'],['5 lits doubles',''],['Bord de rivière',''],['Chambre au RDC','']],
-   flag:"Ton point sur la rivière au pied de la maison avec un nourrisson tient toujours. Réserver côté Gens de Confiance, l'annonce Airbnb du même bien est plus chère.",
-   prev:"Pas mal. Point bonus pour le jacuzzi toute l'année, point malus pour la rivière qui peut être un no go pour nourrisson. Attention ! Avec les dates c'est 2 650 €" },
-
- { id:'moriers', drop:true, n:12, name:"Grande Maison de Campagne 4★", src:'airbnb',
-   url:"https://www.airbnb.fr/rooms/1247748044135019066?check_in=2026-12-30&check_out=2027-01-02&adults=9&children=6&infants=1",
-   commune:"Moriers (28)", km:123, lat:48.15, lng:1.34, rating:"5,0",
-   price:"3 684 €", per:"136 € / adulte / nuit", sort:3684, band:1,
-   extra:'none', extraTxt:"Pas d'équipement bien-être. Salle de jeux enfants et ping-pong seulement.",
-   rooms:"6 chambres + dortoir · 11 lits · 3 salles de bain\nCh. 1 (160, PMR, douche privative) · Ch. 2 (160, douche privative) · Ch. 3 (160)\nCh. 4 (2×80 jumelables) · Ch. 5 (160) · Ch. 6 (2 lits simples)\nDortoir « Cabane » en mezzanine : 3 lits simples 90×200",
-   desc:"Correction : tu avais raison, il y a bien un <strong>dortoir « Cabane » de 3 lits simples en mezzanine</strong> au-dessus des six chambres. Ça règle exactement le dortoir de trois que tu cherchais. Chambres toutes différentes, décorées une à une, salle de jeux pour enfants, cheminée.",
-   tags:[['Cheminée','hot'],['Dortoir 3 lits',''],['Salle de jeux enfants',''],['Ping-pong','']],
-   flag:"Reste 3 salles de bain et une capacité totale de 15 : aucune marge.",
-   prev:"Sympa, un peu juste niveau couchages, il y a un « espace dortoir » pour 3 solos aussi" },
-
- { id:'cinqmars', drop:true, n:13, name:"La maison de la Loire", src:'gdc',
-   url:"https://gensdeconfiance.com/fr/ui/post/vacations__rentals/c94872c9-741d-4688-a25e-8df743a63a90",
-   commune:"Cinq-Mars-la-Pile (37)", km:273, lat:47.35, lng:0.45, rating:"5,0",
-   price:"3 932 €", per:"146 € / adulte / nuit", sort:3932, band:3,
-   extra:'part', extraTxt:"Sauna et jacuzzi présents, mais facturés en supplément : 120 €/jour le sauna, 70 €/jour le jacuzzi, 250 €/jour le jacuzzi luxe.",
-   rooms:"9 chambres · 22 voyageurs, troglodytes comprises",
-   desc:"Ping-pong, badminton, babyfoot, fléchettes, pétanque, très grand brasero et douze vélos. Beaucoup de matière pour occuper six enfants — mais l'essentiel des équipements bien-être se paie à la journée, en plus du loyer.",
-   tags:[['Sauna 120 €/j','spa'],['Jacuzzi 70 €/j','spa'],['Brasero',''],['12 vélos',''],['Babyfoot','']],
-   flag:"La fiche annonce bien 9 chambres et 22 voyageurs — mais trois sont des troglodytes à 120 € la nuit, et le sauna comme le jacuzzi se paient à la journée." },
-
- { id:'longny', drop:true, n:14, name:"Maison familiale dans le Perche", src:'gdc',
-   url:"https://gensdeconfiance.com/fr/ui/post/vacations__rentals/a8781a22-fbc4-4f89-a762-d46c6daae8d1",
-   commune:"Longny-les-Villages (61)", km:152, lat:48.53, lng:0.75, rating:"5,0",
-   price:"2 158 €", per:"80 € / adulte / nuit", sort:2158, band:2, was:"annoncé ~1 050 €",
-   extra:'none', extraTxt:"Aucun équipement bien-être. Tennis, et une piscine chauffée seulement en saison.",
-   rooms:"2 bâtiments (3 + 4 chambres) · 15 couchages\nMaison principale : 2 lits doubles + 1 chambre à 3 lits simples",
-   desc:"Le tarif réel du réveillon est le double de ce que j'avais annoncé — c'était bien un prix hors saison. Reste trois hectares en bordure de forêt, un tennis, et la gare de L'Aigle à quinze minutes pour ceux qui ne veulent pas conduire.",
-   tags:[['Tennis',''],['Gare à 15 min',''],['3 ha en lisière de forêt','']],
-   flag:"Pas d'extra, et pas de cheminée mentionnée. C'est la moins chère, et ça se sent.",
-   prev:"Rien de trop spécifique à remonter…" },
-
- { id:'fertegaucher', drop:true, n:15, name:"La maison de La Ferté-Gaucher", src:'airbnb', star:true,
-   url:"https://www.airbnb.fr/rooms/1603696577945367676?check_in=2026-12-30&check_out=2027-01-02&adults=9&children=6&infants=1",
-   commune:"La Ferté-Gaucher (77)", km:88, lat:48.78, lng:3.31, rating:"4,77",
-   price:"3 975 €", per:"147 € / adulte / nuit", sort:3975, band:1,
-   extra:'yes', extraTxt:"Sauna privé, jacuzzi privé disponible toute l'année, et une salle de sport équipée (haltères, vélo, tapis de course). Piscine chauffée mais saisonnière.",
-   rooms:"7 chambres · 10 lits · 3 salles de bain",
-   desc:"La plus proche de Paris, et la seule sous 1h30 à cumuler <strong>sauna, jacuzzi ouvert toute l'année et salle de sport</strong>. La configuration tombe juste : une suite parentale en 180, trois chambres en 160, deux en 140 — six chambres à lit double pour trois couples et trois solos — et une chambre à quatre lits superposés pour les enfants.",
-   tags:[['Sauna privé','spa'],["Jacuzzi · toute l'année",'spa'],['Salle de sport','spa'],['Piscine chauffée en saison',''],['Cheminée','hot'],['Ping-pong','']],
-   flag:"Trois salles de bain pour seize personnes, et la note la plus basse de la sélection à 4,77." },
-
- { id:'sylvains', drop:true, n:16, name:"La chaumière du Val d'Iton", src:'gdc',
-   url:"https://gensdeconfiance.com/fr/ui/post/vacations__rentals/04fa9e42-0d38-4e3c-bc82-b089d3667c9c",
-   commune:"Sylvains-lès-Moulins (27)", km:118, lat:48.92, lng:1.06, rating:"5,0",
-   price:"2 044 €", per:"76 € / adulte / nuit", sort:2044, band:1,
-   train:"Évreux à 1h de Paris Saint-Lazare, Verneuil-sur-Avre à 1h20 de Montparnasse",
-   extra:'yes', extraTxt:"Bain nordique pour 6 à 8 personnes, utilisable en décembre.",
-   rooms:"2 bâtiments · 7 chambres · 15 voyageurs · 3 salles de bain",
-   desc:"Une chaumière normande et une maison traditionnelle sur le même terrain, en vallée d'Iton. <strong>Le meilleur rapport prix-équipement de la sélection</strong> : un bain nordique pour 2 037 €, note parfaite. C'est aussi la mieux desservie en train.",
-   tags:[['Bain nordique 6-8 pers.','spa'],['Deux gares à 1h de Paris',''],['Chaumière normande','']],
-   flag:"Plafonnée à 15 voyageurs alors que vous êtes 15 plus un bébé — à faire confirmer par le propriétaire. Et plein ouest de Paris : la plus mauvaise position pour ceux qui montent de Toulouse. Les mêmes propriétaires ont une annonce Airbnb « Les chaumes de l\'Iton » : elle ne couvre que la chaumière, dix voyageurs — c\'est ce lien-ci, sur Gens de Confiance, qui donne les deux bâtiments." },
-
- { id:'chaumont', drop:true, n:17, name:"Le domaine de 1896 en Sologne", src:'gdc',
+ { id:'chaumontst', n:4, name:"Le manoir à tourelle de Sologne", src:'gdc',
    url:"https://gensdeconfiance.com/fr/ui/post/vacations__rentals/c9862a0f-e7b6-48c8-be7a-09f7a1be10d3",
-   commune:"Chaumont-sur-Tharonne (41)", km:183, lat:47.58, lng:1.88, rating:null,
-   price:"4 239 €", per:"157 € / adulte / nuit", sort:4239, band:2,
-   extra:'yes', extraTxt:"Jacuzzi et cheminée, confirmés dans le texte de l'annonce.",
-   rooms:"Domaine privatisé · 22 couchages",
-   desc:"Un domaine de 1896 privatisé au cœur de la Sologne, vingt-deux couchages. De la place pour la famille d'Avignon sans discussion, et un jacuzzi.",
-   tags:[['Jacuzzi','spa'],['Cheminée','hot'],['Domaine privatisé',''],['22 couchages','']],
-   flag:"Le détail des chambres n'est pas publié et il n'y a aucun avis. Deux inconnues pour la maison la plus chère de sa catégorie." },
+   commune:"Chaumont-sur-Tharonne (41)", km:179, lat:47.61, lng:1.90, rating:null,
+   price:"4 242 €", per:"129 € / adulte / nuit", sort:4242, band:2,
+   extra:'part', extraTxt:"« Jacuzzi » et « Cheminée / Poêle » figurent dans la liste d'équipements, sans détail — la nature et la saison du jacuzzi sont à confirmer avec l'hôte. La piscine extérieure sous abri est fermée l'hiver.",
+   rooms:"2 bâtiments · 12 chambres · 22 couchages",
+   desc:"Un manoir solognot en brique, avec sa tourelle, privatisé pour le groupe : <strong>12 chambres, salle de réception</strong>, cheminée. Domaine familial « depuis plusieurs générations », au village de Chaumont-sur-Tharonne.",
+   tags:[["Jacuzzi — à confirmer",'spa'],["Cheminée / poêle",'hot'],["Salle de réception",''],["Piscine d'été",'']],
+   flag:"Aucun avis publié sur l'annonce, et le jacuzzi n'est pas décrit : deux questions à poser à l'hôte." },
 
- { id:'stmartin', n:18, name:"Le moulin de Saint-Martin", src:'gdc',
+ { id:'vouzon', n:5, name:"Le Domaine du Buisson", src:'airbnb', star:true,
+   url:"https://www.airbnb.fr/rooms/709238932661261786?check_in=2026-12-30&check_out=2027-01-02&adults=11&children=8&infants=1",
+   commune:"Vouzon (41)", km:180, lat:47.64, lng:2.06, rating:"4,8",
+   price:"4 896 €", per:"148 € / adulte / nuit", sort:4896, band:2,
+   extra:'yes', extraTxt:"Piscine intérieure chauffée, disponible toute l'année. Vérifié dans le texte de l'annonce.",
+   rooms:"Maison principale + annexe · 8 chambres · 5,5 salles de bain · jusqu'à 30 couchages",
+   desc:"Longère solognote sur un domaine de <strong>17 hectares</strong> en lisière de forêt : piscine intérieure chauffée, billard, tipi, parc équestre attenant. Jusqu'à 30 couchages entre la maison principale et l'annexe.",
+   tags:[["Piscine intérieure chauffée",'spa'],["Billard",''],["Tipi",''],["17 hectares",'']],
+   flag:"Beaucoup de couchages passent par des lits doubles partagés et des canapés-lits : la répartition exacte pour 19 est à construire." },
+
+ { id:'champscorons', n:6, name:"La villa des Champs Corons", src:'airbnb',
+   url:"https://www.airbnb.fr/rooms/47947905?check_in=2026-12-30&check_out=2027-01-02&adults=11&children=8&infants=1",
+   commune:"Longny-les-Villages (61)", km:136, lat:48.53, lng:0.75, rating:"4,94",
+   price:"4 900 €", per:"148 € / adulte / nuit", sort:4900, band:2,
+   extra:'yes', extraTxt:"Piscine intérieure chauffée, « de janvier à décembre » selon l'annonce, installée sous les poutres d'une grange.",
+   rooms:"1 longère · 9 chambres · 28 lits · 3 salles de bain",
+   desc:"Une longère en pierre du Perche avec sa <strong>piscine intérieure sous les poutres de la grange</strong>. Terrain de basket, salle de jeux. L'esprit est plus « grande villa équipée » que maison de famille.",
+   tags:[["Piscine intérieure · janv-déc",'spa'],["Basket",''],["Salle de jeux",'']],
+   flag:"3 salles de bain seulement pour tout le groupe, et c'est loin pour Lyon, Toulouse et Avignon." },
+
+ { id:'vrin', n:7, name:"Le Moulin de Vrin", src:'gdc',
    url:"https://gensdeconfiance.com/fr/ui/post/vacations__rentals/4451de6c-522a-4fca-9c4b-bb6e45e1262c",
-   commune:"Saint-Martin-des-Champs (18)", km:242, lat:47.16, lng:2.93, rating:null,
-   price:"3 399 €", per:"126 € / adulte / nuit", sort:3399, band:3,
-   extra:'yes', extraTxt:"Piscine et jacuzzi, cités parmi les activités du domaine. Saisonnalité de la piscine à confirmer.",
-   rooms:"Domaine de deux maisons · 7 chambres · 17 couchages\nLe moulin : salon avec cheminée, bibliothèque, cuisine, 4 chambres, 2 salles de bain — 10 personnes\nSeconde maison : le complément, non détaillé",
-   desc:"Un moulin de charme avec salon à cheminée et bibliothèque, sur un domaine en pleine nature entre Sancerre et la Loire. Jacuzzi, ping-pong, promenades en forêt, canoë sur la Loire à la belle saison.",
-   tags:[['Jacuzzi','spa'],['Piscine',''],['Cheminée','hot'],['Bibliothèque',''],['Ping-pong','']],
-   flag:"Deux maisons, aucun avis, et le second bâtiment non détaillé. Disponibilité et prix revérifiés au calendrier du propriétaire : 1 000 € la nuit, libre du 28 au 31 décembre." },
-
- { id:'pasdejeu', n:19, name:"La villa de Pas-de-Jeu", src:'airbnb',
-   url:"https://www.airbnb.fr/rooms/1101896436539549396?check_in=2026-12-30&check_out=2027-01-02&adults=9&children=6&infants=1",
-   commune:"Pas-de-Jeu (79)", km:345, lat:46.94, lng:0.11, rating:"4,97",
-   price:"4 318 €", per:"160 € / adulte / nuit", sort:4318, band:4,
-   extra:'yes', extraTxt:"Sauna privé et jacuzzi privé disponible toute l'année, plus une piscine.",
-   rooms:"8 chambres · 8 lits · 6 salles de bain + WC",
-   desc:"Huit chambres et <strong>six salles de bain</strong> : la question du couchage et celle de la douche du matin sont réglées ensemble. Sauna et jacuzzi privatifs, salle de jeux pour enfants. Aux confins du Poitou, dans les Deux-Sèvres.",
-   tags:[['Sauna privé','spa'],["Jacuzzi · toute l'année",'spa'],['Piscine',''],['6 salles de bain',''],['Salle de jeux enfants','']],
-   flag:"345 km : c'est la limite des 4h que tu as fixée. En revanche c'est la seule de la liste qui rapproche vraiment la famille de Toulouse." }
+   commune:"Saint-Martin-des-Champs (18)", km:218, lat:47.16, lng:2.93, rating:null,
+   price:"3 399 €", per:"103 € / adulte / nuit", sort:3399, band:3,
+   extra:'yes', extraTxt:"Jacuzzi extérieur 5 places chauffé toute l'année, vue rivière. La piscine, elle, n'est chauffée que de mai à octobre. Vérifié dans le texte de l'annonce.",
+   rooms:"2 maisons · 7 chambres = 6 grands lits doubles + 1 dortoir · 17 couchages annoncés, « jusqu'à 30 sur demande »",
+   desc:"Un moulin au bord de la rivière, sur un parc de 6 hectares : salon avec cheminée, bibliothèque, et un <strong>jacuzzi extérieur chauffé toute l'année</strong> face à l'eau. Sur Gens de Confiance, 1 144 € de moins que la même maison sur Airbnb.",
+   tags:[["Jacuzzi extérieur · toute l'année",'spa'],["Cheminée",'hot'],["Rivière · 6 hectares",''],["Piscine d'été",'']],
+   flag:"17 couchages annoncés : le passage à 19 (« sur demande ») est à confirmer avec l'hôte avant de voter trop fort." }
 ];
 
 /* ---- couchages : d = lit double/queen, s = lit simple, u = lits superposés,
        c = canapé-lit, b = lit bébé. Absent = non publié par l'annonce. ---- */
 var BEDS = {
- chateaulandon:{r:[
-   {n:"Chambre 1",b:[["d",1]],x:"sdb attenante"},
-   {n:"Chambre 2",b:[["s",2]]},
-   {n:"Chambre 3",b:[["d",1]]},
-   {n:"Chambre 4",b:[["d",1]]},
-   {n:"Chambre 5",b:[["d",1]]},
-   {n:"Chambre 6",b:[["d",1]]},
-   {n:"Chambre 7",b:[["d",1],["s",1]],x:"sdb attenante"}],
-   plus:"Annexe indépendante en supplément → jusqu'à 22 couchages"},
+ piffonds:{r:[
+   {g:"1ère maison",n:"Chambres 1 à 5",b:[],x:"12 couchages · 2 salles de bain"},
+   {g:"2e maison",n:"Chambres 6 à 8",b:[],x:"12 couchages · 3 salles de bain"}],
+   gx:{"1ère maison":"salle à manger de 24 places, cuisine équipée avec chambre froide",
+       "2e maison":"le complément, face à la première"},
+   plus:"24 couchages annoncés mais 18 lits comptés par Airbnb — la répartition exacte est à demander."},
 
- lorris:{r:[
-   {g:"La maison",n:"Chambre 1",b:[],x:"rez-de-chaussée, salle d'eau + WC"},
-   {g:"La maison",n:"Chambre 2",b:[],x:"étage"},
-   {g:"La maison",n:"Chambre 3",b:[],x:"étage"},
-   {g:"La maison",n:"Chambre 4",b:[],x:"étage"},
-   {g:"La maison",n:"Chambre 5",b:[],x:"étage"},
-   {g:"La grange",n:"Chambre 6",b:[],x:"étage"},
-   {g:"La grange",n:"Chambre 7",b:[],x:"étage"},
-   {g:"La grange",n:"Chambre 8",b:[],x:"étage"}],
-   gx:{"La maison":"cuisine, séjour avec cheminée, bibliothèque, salon TV · 2 salles d'eau",
-       "La grange":"cuisine, sauna, salle de sport · salle de jeux à l'étage · 1 salle de bain"},
-   plus:"Huit chambres confirmées, mais l'annonce ne détaille pas les lits — à demander"},
+ etoges:{r:[
+   {n:"Chambre 1",b:[["s",2]]},
+   {n:"Chambre 2",b:[["d",1]],x:"lit king size"},
+   {n:"Chambre 3",b:[["d",1]],x:"lit king size"},
+   {n:"Chambres 4 à 8",b:[]}],
+   plus:"8 chambres et 23 lits en tout, 3 salles de bain — seules trois chambres sont détaillées, le reste est à demander."},
 
- gueleger:{r:[
-   {n:"Chambre 1",b:[["d",1]]},{n:"Chambre 2",b:[["d",1]]},{n:"Chambre 3",b:[["d",1]]},
-   {n:"Chambre 4",b:[["d",1]]},{n:"Chambre 5",b:[["d",1]]},{n:"Chambre 6",b:[["d",1]]},
-   {n:"Chambre 7",b:[["s",1],["u",1]]}],
-   plus:"Les six premières sont en lit Queen Size"},
+ bretoncelles:{r:[
+   {g:"Maison principale",n:"Chambre 1 · RDC",b:[["d",1]]},
+   {g:"Maison principale",n:"Chambres 2 à 5",b:[],x:"à l'étage"},
+   {g:"La petite maison",n:"Chambres 6 et 7",b:[]}],
+   gx:{"Maison principale":"200 m² · espace de vie avec coin jeu (80 m²) · 2 salles de bain",
+       "La petite maison":"salon-kitchenette, 2 salles de douche et le sauna infrarouge"},
+   plus:"18 places au total — il en faut 19 : à négocier avec l'hôte."},
 
- esternay:{r:[],plus:"7 chambres et 3 salles de bain, mais seulement 8 lits annoncés et aucun détail publié. C'est le point à faire préciser avant tout."},
+ chaumontst:{r:[],plus:"12 chambres et 22 couchages sur deux bâtiments — répartition non publiée (le château seul est limité à 15 personnes)."},
 
- boislandry:{r:[],plus:"7 chambres, 14 lits et 7 salles de bain — la répartition n'est pas publiée."},
+ vouzon:{r:[
+   {g:"Maison principale",n:"Chambres 1 à 3",b:[["d",2]],x:"4 personnes chacune"},
+   {g:"Maison principale",n:"Chambre 4",b:[["d",1]]},
+   {g:"Maison principale",n:"Appoint",b:[["c",1],["s",2]],x:"canapé-lit + 2 lits simples"},
+   {g:"L'annexe",n:"Chambre 5 · RDC",b:[["d",1],["c",1]],x:"2-3 pers · sdb privative"},
+   {g:"L'annexe",n:"Chambres 6 et 7",b:[["d",1],["c",1]],x:"4 personnes chacune"}],
+   plus:"Jusqu'à 30 couchages — beaucoup passent par des lits doubles partagés et des canapés-lits : bien pour les enfants, à répartir pour les adultes."},
 
- belvaudiere:{r:[],plus:"11 chambres et 8 salles de bain, sans détail des lits dans l'annonce."},
+ champscorons:{r:[],plus:"9 chambres, 28 lits, 3 salles de bain — la répartition n'est pas publiée."},
 
- annayairbnb:{r:[
-   {n:"Chambre 1 · RDC",b:[["d",1]],x:"WC et lavabo en suite"},
-   {n:"Étage intermédiaire",b:[["d",1],["s",1]]},
-   {n:"1ᵉʳ étage",b:[["d",1]]},{n:"1ᵉʳ étage",b:[["d",1]]},
-   {n:"1ᵉʳ étage",b:[["s",3]]},
-   {n:"Mezzanine",b:[["d",1]],x:"accès par échelle"}],
-   plus:"Lit à barreaux, lit parapluie et chaise haute fournis"},
-
- beaugency:{r:[
-   {n:"Chambre 1",b:[["d",1],["b",1]]},
-   {n:"Chambre 2",b:[["d",1]]},{n:"Chambre 3",b:[["d",1]]},{n:"Chambre 4",b:[["d",1]]},
-   {n:"Chambre 5",b:[["s",3],["u",1]]},
-   {n:"Chambre 6",b:[["s",2]],x:"en enfilade de la 5"}],
-   plus:"Lits doubles en 160. Une des trois salles de bain a le bain balnéo."},
-
- montigny:{r:[
-   {n:"Chambre 4",b:[["d",1]],x:"sdb privative, baignoire"},
-   {n:"Chambre 5",b:[["d",1]],x:"sdb privative, baignoire"},
-   {n:"Chambre 7",b:[["d",1]],x:"queen 160"},
-   {n:"Chambre 8",b:[["d",1]],x:"mezzanine ouverte sur la salle à manger"},
-   {n:"Chambres 1, 2, 3, 6",b:[]}],
-   plus:"Huit chambres au total, quatre détaillées seulement — et l'annonce ne dit pas laquelle est dans quel bâtiment"},
-
- favril:{r:[
-   {g:"La chaumière",n:"Chambre 1",b:[]},{g:"La chaumière",n:"Chambre 2",b:[]},
-   {g:"La chaumière",n:"Chambre 3",b:[],x:"1 salle de bain"},
-   {g:"La maison d'amis",n:"Chambre 4",b:[]},{g:"La maison d'amis",n:"Chambre 5",b:[]},
-   {g:"La maison d'amis",n:"Chambre 6",b:[]},{g:"La maison d'amis",n:"Chambre 7",b:[]},
-   {g:"La maison d'amis",n:"Chambre 8",b:[]},
-   {g:"La maison d'amis",n:"Chambre 9",b:[],x:"2 salles de bain, 1 bureau"}],
-   gx:{"La chaumière":"salon-salle à manger avec poêle et babyfoot, grande cuisine",
-       "La maison d'amis":"6 chambres, 1 bureau, 2 salles de bain"},
-   plus:"Neuf chambres pour 17 à 18 couchages — répartition des lits à demander"},
-
- annay:{r:[
-   {n:"Chambre · RDC",b:[["d",1]]},
-   {n:"Chambre",b:[["d",1]]},{n:"Chambre",b:[["d",1]]},
-   {n:"Chambre",b:[["d",1]]},{n:"Chambre",b:[["d",1]]},
-   {n:"Chambre",b:[["s",4]]},
-   {n:"Mezzanines",b:[["c",2]],x:"deux canapés-lit"}],
-   plus:"17 couchages annoncés : 5 lits doubles, 4 simples, 2 canapés-lit. Attribution par pièce à confirmer."},
-
- moriers:{r:[
-   {n:"Chambre 1",b:[["d",1]],x:"PMR, douche privative"},
-   {n:"Chambre 2",b:[["d",1]],x:"douche privative"},
-   {n:"Chambre 3",b:[["d",1]]},
-   {n:"Chambre 4",b:[["s",2]],x:"2×80 jumelables en 160"},
-   {n:"Chambre 5",b:[["d",1]]},
-   {n:"Chambre 6",b:[["s",2]]},
-   {n:"Dortoir « Cabane »",b:[["s",3]],x:"mezzanine"}],
-   plus:"Lits doubles en 160"},
-
- cinqmars:{r:[
-   {n:"Chambre 1",b:[]},{n:"Chambre 2",b:[]},{n:"Chambre 3",b:[]},
-   {n:"Chambre 4",b:[]},{n:"Chambre 5",b:[]},
-   {n:"Dortoir",b:[["s",5]]}],
-   plus:"3 chambres troglodytes en plus, facturées 120 € la nuit chacune"},
-
- longny:{r:[
-   {g:"La maison principale",n:"Chambre 1",b:[["d",1]]},
-   {g:"La maison principale",n:"Chambre 2",b:[["d",1]]},
-   {g:"La maison principale",n:"Chambre 3",b:[["s",3]]},
-   {g:"Le second bâtiment",n:"Chambre 4",b:[]},{g:"Le second bâtiment",n:"Chambre 5",b:[]},
-   {g:"Le second bâtiment",n:"Chambre 6",b:[]},{g:"Le second bâtiment",n:"Chambre 7",b:[]}],
-   gx:{"Le second bâtiment":"non détaillé dans l'annonce"},
-   plus:"Seule la maison principale est détaillée dans l'annonce"},
- fertegaucher:{r:[
-   {n:"Suite parentale",b:[["d",1]],x:"lit 180, salle de bain privative"},
-   {n:"Chambre 2",b:[["d",1]],x:"lit 160"},
-   {n:"Chambre 3",b:[["d",1]],x:"lit 160"},
-   {n:"Chambre 4",b:[["d",1]],x:"lit 160"},
-   {n:"Chambre 5",b:[["d",1]],x:"lit 140"},
-   {n:"Chambre 6",b:[["d",1]],x:"lit 140"},
-   {n:"Chambre enfants",b:[["u",4]],x:"quatre lits superposés"}],
-   plus:"Six chambres à lit double : trois couples, trois solos. Mais trois salles de bain seulement."},
-
- sylvains:{r:[
-   {g:"La chaumière",n:"Chambre 1",b:[]},{g:"La chaumière",n:"Chambre 2",b:[]},
-   {g:"La chaumière",n:"Chambre 3",b:[],x:"1 salle de bain"},
-   {g:"La maison normande",n:"Chambre 4",b:[]},{g:"La maison normande",n:"Chambre 5",b:[]},
-   {g:"La maison normande",n:"Chambre 6",b:[]},
-   {g:"La maison normande",n:"Chambre 7",b:[],x:"2 salles de bain"}],
-   gx:{"La chaumière":"110 m2, 7 couchages","La maison normande":"170 m2, 9 couchages"},
-   plus:"16 couchages au total, mais l'annonce ne donne pas le type de lit"},
-
- chaumont:{r:[],plus:"Domaine privatise de 22 couchages, sans detail des chambres dans l'annonce"},
-
- stmartin:{r:[
-   {g:"Le moulin",n:"Chambre 1",b:[]},{g:"Le moulin",n:"Chambre 2",b:[]},
-   {g:"Le moulin",n:"Chambre 3",b:[]},{g:"Le moulin",n:"Chambre 4",b:[],x:"2 salles de bain"},
-   {g:"La seconde maison",n:"Chambres 5 et suivantes",b:[]}],
-   gx:{"Le moulin":"salon avec cheminee, bibliotheque, cuisine - 10 personnes",
-       "La seconde maison":"non detaillee dans l'annonce"},
-   plus:"17 couchages annonces au total"},
-
- pasdejeu:{r:[],plus:"8 chambres et 6 salles de bain, sans detail des lits dans l'annonce"}
+ vrin:{r:[
+   {g:"Le moulin",n:"Chambres 1 à 6",b:[["d",1]],x:"un grand lit double chacune, matelas à mémoire de forme"},
+   {g:"Le moulin",n:"Chambre 7 · dortoir",b:[["u",2]],x:"2 lits superposés (4 places)"}],
+   gx:{"Le moulin":"salon avec cheminée, bibliothèque · 5 salles d'eau + 6 WC"},
+   plus:"17 couchages annoncés, « jusqu'à 30 sur demande » avec la seconde maison — le 19e couchage est à confirmer avec l'hôte."}
 };
-
-/* ---- bâtiments + ton retour du tour 2 ---- */
-
-/* --- couchages relevés dans « Où vous dormirez » sur Airbnb, et comptes de
-       chambres relevés sur les fiches Gens de Confiance --- */
-var BEDS2 = {
- chateaulandon:{r:[
-   {n:"Chambre 1",b:[["d",1],["s",1]]},
-   {n:"Chambre 2",b:[["s",3]]},
-   {n:"Chambre 3",b:[["d",1]]},
-   {n:"Chambre 4",b:[["d",1]]},
-   {n:"Chambre 5",b:[["d",1]]},
-   {n:"Chambre 6",b:[["d",1],["s",1]]},
-   {n:"Chambre 7",b:[["d",1],["s",2]],x:"lit queen"}],
-   plus:"Relevé sur « Où vous dormirez ». La chambre 2, à trois lits simples, fait le dortoir enfants. Annexe en supplément."},
-
- esternay:{r:[
-   {n:"Chambre 1",b:[["d",1]]},
-   {n:"Chambre 2",b:[["d",1]]},
-   {n:"Chambre 3",b:[["d",2]]},
-   {n:"Chambre 4",b:[["d",1]]},
-   {n:"Chambre 5",b:[["d",1]]},
-   {n:"Chambre 6",b:[["d",1]]},
-   {n:"Salon",b:[["c",1]],x:"canapé convertible"}],
-   plus:"Sept lits doubles sur six chambres. Le point faible reste les trois salles de bain."},
-
- boislandry:{r:[
-   {n:"Chambre 1",b:[["d",1]]},
-   {n:"Chambre 2",b:[["d",2],["s",1]]},
-   {n:"Chambre 3",b:[["d",1],["u",1]]},
-   {n:"Chambre 4",b:[["s",2]]},
-   {n:"Chambre 5",b:[["s",2]]},
-   {n:"Chambre 6",b:[["d",1]]},
-   {n:"Chambre 7",b:[["d",1],["s",1]]}],
-   plus:"Cinq chambres à lit double, deux chambres enfants, sept salles de bain."},
-
- belvaudiere:{r:[
-   {n:"Chambre 1",b:[["d",1]],x:"lit king size"},
-   {n:"Chambre 2",b:[["d",1]]},
-   {n:"Chambre 3",b:[["d",1]]}],
-   plus:"L'annonce dit 11 chambres mais n'en détaille que trois dans « Où vous dormirez ». Écart à faire expliquer."},
-
- pasdejeu:{r:[
-   {n:"Chambre 1",b:[["d",1]],x:"queen"},{n:"Chambre 2",b:[["d",1]],x:"queen"},
-   {n:"Chambre 3",b:[["d",1]],x:"queen"},{n:"Chambre 4",b:[["d",1]],x:"queen"},
-   {n:"Chambre 5",b:[["d",1]],x:"queen"},{n:"Chambre 6",b:[["d",1]],x:"queen"},
-   {n:"Chambre 7",b:[["d",1]],x:"queen"},{n:"Chambre 8",b:[["s",1]]}],
-   plus:"Sept chambres en lit queen et six salles de bain : la meilleure configuration de toute la sélection."},
-
- fertegaucher:{r:[
-   {n:"Chambre 1",b:[["d",1]],x:"lit king size"},
-   {n:"Chambre 2",b:[["d",1]]},
-   {n:"Chambre 3",b:[["u",2]],x:"chambre enfants"},
-   {n:"Chambre 4",b:[["d",1]],x:"queen"},
-   {n:"Chambre 5",b:[["d",1]]},
-   {n:"Chambre 6",b:[["d",1]],x:"queen"},
-   {n:"Chambre 7",b:[["d",1]],x:"queen"},
-   {n:"Salon",b:[["c",1]]}],
-   plus:"Six chambres à lit double et une chambre à deux lits superposés. Trois salles de bain."},
-
- gueleger:{r:[
-   {n:"Chambre 1",b:[["d",1]]},
-   {n:"Chambre 2",b:[["d",1]],x:"queen"},
-   {n:"Chambre 3",b:[["d",1]],x:"queen"},
-   {n:"Chambre 4",b:[["d",1]],x:"queen"},
-   {n:"Chambre 5",b:[["d",1],["b",1]],x:"queen + lit bébé"},
-   {n:"Chambre 6",b:[["s",3]],x:"le dortoir de trois"},
-   {n:"Chambre 7",b:[["d",1]],x:"queen"}],
-   plus:"Six chambres à lit double, un dortoir de trois lits simples, un lit bébé fourni. C'est le brief, à la lettre."},
-
- annay:{r:[
-   {n:"Chambre 1",b:[["s",3]]},
-   {n:"Chambre 2",b:[["d",1]]},
-   {n:"Chambre 3",b:[["d",1]]},
-   {n:"Chambre 4",b:[["d",1],["b",1]]},
-   {n:"Chambre 5",b:[["d",1],["b",1]]},
-   {n:"Chambre 6",b:[["d",1],["s",1]]},
-   {n:"Chambre 7",b:[["c",2]],x:"mezzanine"}],
-   plus:"Relevé sur l'annonce Airbnb de la même maison. Deux lits bébé fournis."},
-
- cinqmars:{r:[
-   {n:"Chambre 1",b:[]},{n:"Chambre 2",b:[]},{n:"Chambre 3",b:[]},
-   {n:"Chambre 4",b:[]},{n:"Chambre 5",b:[]},
-   {n:"Dortoir",b:[["s",5]]},
-   {n:"Troglodyte 1",b:[],x:"120 €/nuit en supplément"},
-   {n:"Troglodyte 2",b:[],x:"120 €/nuit en supplément"},
-   {n:"Troglodyte 3",b:[],x:"120 €/nuit en supplément"}],
-   plus:"La fiche annonce 9 chambres et 22 voyageurs — les trois troglodytes comprises, facturées en plus."},
-
- chaumont:{r:Array.from({length:12},function(_,i){return {n:"Chambre "+(i+1),b:[]}}),
-   plus:"La fiche annonce 12 chambres et 22 voyageurs, sans détailler les lits."},
-
- stmartin:{r:[
-   {g:"Le moulin",n:"Chambre 1",b:[]},{g:"Le moulin",n:"Chambre 2",b:[]},
-   {g:"Le moulin",n:"Chambre 3",b:[]},{g:"Le moulin",n:"Chambre 4",b:[],x:"2 salles de bain"},
-   {g:"La seconde maison",n:"Chambre 5",b:[]},{g:"La seconde maison",n:"Chambre 6",b:[]},
-   {g:"La seconde maison",n:"Chambre 7",b:[]}],
-   gx:{"Le moulin":"salon avec cheminée, bibliothèque, cuisine — 10 personnes",
-       "La seconde maison":"non détaillée dans l'annonce"},
-   plus:"La fiche annonce 7 chambres et 17 voyageurs."},
-
- sylvains:{r:[
-   {g:"La chaumière",n:"Chambre 1",b:[]},{g:"La chaumière",n:"Chambre 2",b:[]},
-   {g:"La chaumière",n:"Chambre 3",b:[],x:"1 salle de bain"},
-   {g:"La maison normande",n:"Chambre 4",b:[]},{g:"La maison normande",n:"Chambre 5",b:[]},
-   {g:"La maison normande",n:"Chambre 6",b:[]},
-   {g:"La maison normande",n:"Chambre 7",b:[],x:"2 salles de bain"}],
-   gx:{"La chaumière":"110 m², 7 couchages","La maison normande":"170 m², 9 couchages"},
-   plus:"La fiche plafonne à 15 voyageurs — vous êtes 15 plus un bébé. C'est très probablement ce qui affichait « plus disponible »."}
-};
-Object.keys(BEDS2).forEach(function(k){ BEDS[k]=BEDS2[k]; });
 
 var SUPP = {
- chateaulandon:{bld:"1 maison",bldx:"annexe indépendante en option"},
- lorris:{bld:"2 bâtiments",bldx:"la maison et la grange attenante",
-   p2:"On garde, mais il faudra des photos en + pour se faire une idée notamment du sauna et de la salle de sport, car niveau charme c'est pas wow",
-   todo:"Photos supplémentaires à demander au propriétaire : sauna, salle de sport, salle de jeux."},
- gueleger:{bld:"1 maison",bldx:"400 m² d'un seul tenant"},
- esternay:{bld:"1 maison"},
- boislandry:{bld:"1 maison"},
- belvaudiere:{bld:"1 domaine"},
- annayairbnb:{bld:"1 maison",bldx:"300 m² sur trois niveaux"},
- beaugency:{bld:"1 maison",bldx:"200 m²",
-   p2:"Je trouve pas mal, le côté sauna et yoga c'est sympa, et le petit four extérieur à bois ça peut être sympa aussi. Pas wow non plus mais on garde"},
- montigny:{bld:"2 bâtiments",bldx:"côte à côte, en « L » autour d'un saule"},
- favril:{bld:"2 maisons",bldx:"la chaumière et la maison d'amis",
-   p2:"Sympa, mais 2 maisons, maybe pas idéal"},
- annay:{bld:"1 maison",bldx:"le moulin, sur trois niveaux",
-   p2:"Why not. Pas archi convaincu, mais bon on garde"},
- moriers:{bld:"1 maison"},
- cinqmars:{bld:"1 maison",bldx:"+ 3 chambres troglodytes en supplément",
-   p2:"N'est plus dispo ?",
-   todo:"Vérifié : toujours disponible. L'annonce ressort dans la recherche Gens de Confiance filtrée sur le 30/12 → 02/01."},
- longny:{bld:"2 bâtiments",bldx:"3 et 4 chambres",
-   p2:"Pas dingue, mais pas cher"},
- fertegaucher:{bld:"1 maison"},
- sylvains:{bld:"2 bâtiments",bldx:"la chaumière et la maison normande"},
- chaumont:{bld:"1 domaine",bldx:"privatisé"},
- stmartin:{bld:"2 maisons",bldx:"le moulin et une seconde maison"},
- pasdejeu:{bld:"1 villa",bldx:"« Clos de Joco »",
-   p2:"Tu as les couchages dans « où vous dormirez », tu peux les ajouter (et vérifier pour tous les Airbnb ?) Très chouette en tout cas, et top niveau équipement"},
- chateaulandon2:{},
+ piffonds:{bld:"2 maisons",bldx:"face à face, 12 couchages chacune"},
+ etoges:{bld:"1 maison",bldx:"d'un seul tenant, piscine incluse"},
+ bretoncelles:{bld:"2 maisons",bldx:"la principale et la petite au sauna"},
+ chaumontst:{bld:"2 bâtiments",bldx:"le château et son annexe",
+   todo:"Demander à l'hôte : nature du jacuzzi (intérieur ? bain à remous ?) et répartition des chambres."},
+ vouzon:{bld:"2 bâtiments",bldx:"la maison principale et l'annexe"},
+ champscorons:{bld:"1 maison",bldx:"la piscine est dans la grange attenante"},
+ vrin:{bld:"2 maisons",bldx:"le moulin et une seconde maison",
+   todo:"Demander à l'hôte : comment passer de 17 à 19 couchages, et à quel prix."}
 };
-Object.assign(SUPP,{
- chateaulandon:{bld:"1 maison",bldx:"« Moulin rénové », annexe en option",
-   p2:"5/5 — Très chouette ça. Un peu loin pour les autres mais on like."},
- esternay:{bld:"1 maison",bldx:"« La Gouyardière »",
-   p2:"5/5 — Hyper chouette."},
- fertegaucher:{bld:"1 maison",bldx:"« Villa Les Roches »",
-   p2:"5/5 — Top ça."},
- gueleger:{bld:"1 maison",bldx:"400 m² d'un seul tenant",
-   p2:"5/5 — Très sympa."},
- boislandry:{bld:"1 maison",
-   p2:"Moins stylé mais moins cher que d'autres avec piscine intérieure."},
- favril:{bld:"2 maisons",bldx:"la chaumière et la maison d'amis",
-   p2:"Sympa, mais 2 maisons, peut-être pas idéal (et pas d'extra)."},
- lorris:{bld:"2 bâtiments",bldx:"la maison et la grange attenante",
-   p2:"On garde, mais il faudra des photos en plus du sauna et de la salle de sport : niveau charme c'est pas wow.",
-   todo:"Photos à demander au propriétaire : sauna, salle de sport, salle de jeux."},
- annay:{bld:"1 maison",bldx:"le moulin, sur trois niveaux",
-   p2:"Why not. Pas archi convaincu, mais on garde."},
- beaugency:{bld:"1 maison",bldx:"200 m²",
-   p2:"Pas mal, le côté sauna et yoga c'est sympa, le four extérieur à bois aussi. Pas wow non plus mais on garde."},
- longny:{bld:"2 bâtiments",bldx:"3 et 4 chambres",
-   p2:"Pas dingue, mais pas cher."},
- belvaudiere:{bld:"1 domaine",
-   p2:"Stylé mais pas d'extra, pas sûr qu'on garde vu le prix."},
- chaumont:{bld:"1 domaine",bldx:"privatisé, 12 chambres",
-   p2:"Doute sur la disponibilité — vérifié depuis : disponible."},
- stmartin:{bld:"2 maisons",bldx:"le moulin et une seconde maison",
-   p2:"Doute sur la disponibilité — vérifié depuis : disponible."},
- cinqmars:{bld:"1 maison",bldx:"+ 3 chambres troglodytes en supplément",
-   p2:"Doute sur la disponibilité — vérifié depuis : disponible.",
-   todo:"Sauna et jacuzzi facturés à la journée : à chiffrer avant de comparer au reste."},
- sylvains:{bld:"2 bâtiments",bldx:"la chaumière et la maison normande",
-   p2:"Noté comme plus disponible — en réalité la fiche plafonne à 15 voyageurs.",
-   todo:"Demander au propriétaire si le bébé compte dans les 15 voyageurs."}
-});
-
 
 /* Trajets routiers réels, calculés sur le réseau routier (OSRM) : [km, minutes] */
 var ROAD = {
- chateaulandon:{P:[97,81],L:[388,245],T:[644,410]},
- lorris:{P:[137,105],L:[412,260],T:[569,382]},
- gueleger:{P:[258,185],L:[470,299],T:[490,339]},
- esternay:{P:[100,93],L:[446,297],T:[766,499]},
- boislandry:{P:[127,103],L:[539,346],T:[657,429]},
- belvaudiere:{P:[210,144],L:[590,372],T:[688,425]},
- annay:{P:[198,147],L:[287,187],T:[660,464]},
- beaugency:{P:[157,119],L:[473,304],T:[578,371]},
- favril:{P:[142,120],L:[554,363],T:[652,445]},
- moriers:{P:[127,102],L:[501,327],T:[610,400]},
- cinqmars:{P:[273,183],L:[502,314],T:[600,369]},
- longny:{P:[137,129],L:[573,382],T:[691,465]},
- fertegaucher:{P:[80,73],L:[441,304],T:[748,486]},
- sylvains:{P:[109,99],L:[565,370],T:[706,473]},
- chaumont:{P:[181,129],L:[418,267],T:[523,334]},
- stmartin:{P:[223,151],L:[292,209],T:[565,364]},
- pasdejeu:{P:[321,232],L:[550,363],T:[536,344]}
+ piffonds:{P:[124,89],L:[353,217],T:[670,417],A:[578,362]},
+ etoges:{P:[123,108],L:[461,293],T:[792,522],A:[686,438]},
+ bretoncelles:{P:[143,122],L:[556,366],T:[674,449],A:[781,511]},
+ chaumontst:{P:[179,126],L:[415,265],T:[520,332],A:[640,406]},
+ vouzon:{P:[180,129],L:[416,268],T:[522,335],A:[641,409]},
+ champscorons:{P:[136,133],L:[574,384],T:[692,467],A:[799,529]},
+ vrin:{P:[218,152],L:[295,213],T:[568,367],A:[520,358]}
 };
 
-var ORIG = [["Paris",48.8566,2.3522],["Lyon",45.7640,4.8357],["Toulouse",43.6047,1.4442]];
+var ORIG = [["Paris",48.8566,2.3522],["Lyon",45.7640,4.8357],["Toulouse",43.6047,1.4442],["Avignon",43.9493,4.8055]];
 
 var HOUSES = ALL_HOUSES.filter(function(h){return !h.drop});
 ALL_HOUSES.forEach(function(h,i){});
@@ -1024,7 +625,7 @@ function sleepHTML(h){
 }
 
 function distHTML(h){
-  var r=ROAD[h.id], keys=[['P','Paris'],['L','Lyon'],['T','Toulouse']];
+  var r=ROAD[h.id], keys=[['P','Paris'],['L','Lyon'],['T','Toulouse'],['A','Avignon']];
   if(!r) return '';
   return '<div class="dists">'+keys.map(function(k){
     var d=r[k[0]];
@@ -1060,7 +661,7 @@ function houseHTML(h){
   s+=sl.html;
   var p4=PLUS4[h.id];
   if(p4) s+='<div class="plus4 '+p4.ok+'"><span class="mark">'+(p4.ok==='part'?'◐':'○')+'</span>'
-    +'<span><b>Si la famille d\'Avignon vient (+4)</b> '+esc(p4.txt)
+    +'<span><b>Si on passe à 21 (+2)</b> '+esc(p4.txt)
     +(p4.prix?' <em>'+esc(p4.prix)+'</em>':'')+'</span></div>';
   s+='</div>';
 
@@ -1179,13 +780,13 @@ function resultsHTML(){
 function renderBody(){
   var s='<div class="wrap">';
   s+='<header><div class="eyebrow">30 décembre 2026 → 2 janvier 2027 · 3 nuits</div>'
-    +'<h1>On part <em>où</em> ?</h1>'
-    +'<p class="standfirst">Six maisons disponibles sur les dates exactes, toutes au budget, toutes vérifiées une par une. Il n\'y a plus qu\'à dire ce que tu en penses — ça prend 5 minutes, sur le canapé, à la pause dej, ou même sur le pot.</p>'
+    +'<h1>On repart <em>où</em> ?</h1>'
+    +'<p class="standfirst">Le groupe s\'est agrandi, on refait un tour : sept maisons pour 19, disponibles sur les dates, toutes vérifiées une par une — avec cette fois un vrai extra d\'hiver dans (presque) chacune. Ça prend 5 minutes, promis.</p>'
     +'<dl class="brief">'
     +'<div><dt>Dates</dt><dd>30 déc → 2 jan</dd></div>'
-    +'<div><dt>Le groupe</dt><dd>9 adultes · 6 enfants · 1 bébé</dd></div>'
-    +'<div><dt>Budget</dt><dd>4 000 – 4 400 €<small>~150 €/adulte/nuit, tolérance 10 %</small></dd></div>'
-    +'<div><dt>Maisons</dt><dd>6 à départager</dd></div>'
+    +'<div><dt>Le groupe</dt><dd>11 adultes · 8 enfants · 1 bébé</dd></div>'
+    +'<div><dt>Budget</dt><dd>4 950 €<small>150 €/adulte/nuit × 11 · plafond souple 5 445 €</small></dd></div>'
+    +'<div><dt>Maisons</dt><dd>7 à départager</dd></div>'
     +'</dl></header>';
 
   if(!me){
@@ -1231,7 +832,7 @@ function renderBody(){
     +'<button type="button" class="ghost" id="copy">Voir mon récap</button>'
     +'<button type="button" class="primary" id="save">Enregistrer mon vote</button></div>';
 
-  s+='<footer>Prix vérifiés aux dates exactes, taxes et frais de service compris. Temps de trajet calculés sur le réseau routier depuis Paris, Lyon et Toulouse. Les liens des titres ouvrent l\'annonce d\'origine.</footer>';
+  s+='<footer>Prix vérifiés aux dates exactes, taxes et frais de service compris. Temps de trajet calculés sur le réseau routier depuis Paris, Lyon, Toulouse et Avignon. Les liens des titres ouvrent l\'annonce d\'origine.</footer>';
 
   s+='<dialog id="dlg"><h4>Ton récap</h4><p>Sélectionne le texte et copie-le si tu veux l\'envoyer à Pierre.</p>'
     +'<textarea id="dlgtxt" readonly></textarea><div class="row"><button type="button" class="ghost" id="dlgclose">Fermer</button></div></dialog>';
@@ -1243,7 +844,7 @@ function renderBody(){
 /* ---------------- état ---------------- */
 function ensureMe(){ if(!state.voters[me]) state.voters[me]={votes:{},rank:[],verdict:{}}; return state.voters[me]; }
 function touch(){ dirty=true; setStatus(); persistLocal(); }
-function persistLocal(){ try{ localStorage.setItem('vote-brouillon', JSON.stringify(state.voters[me]||{})); }catch(e){} }
+function persistLocal(){ try{ localStorage.setItem('vote19-brouillon', JSON.stringify(state.voters[me]||{})); }catch(e){} }
 
 function setStatus(msg){
   var el=document.getElementById('status'); if(!el) return;
@@ -1291,7 +892,7 @@ function onClick(e){
 
   var see=t.closest('[data-see]');
   if(see){ showOthers=see.getAttribute('data-see')==='1';
-    try{ localStorage.setItem('vote-voir',showOthers?'1':'0'); }catch(err){}
+    try{ localStorage.setItem('vote19-voir',showOthers?'1':'0'); }catch(err){}
     full(); return; }
 
   var vb=t.closest('.vbtn');
@@ -1439,7 +1040,7 @@ function bind(){
       var n=(inp.value||'').trim().slice(0,24);
       if(!n){ inp.focus(); return; }
       me=n; if(showOthers===null) showOthers=false;
-      try{ localStorage.setItem('vote-nom',me); localStorage.setItem('vote-voir',showOthers?'1':'0'); }catch(err){}
+      try{ localStorage.setItem('vote19-nom',me); localStorage.setItem('vote19-voir',showOthers?'1':'0'); }catch(err){}
       ensureMe(); full();
     };
     go.addEventListener('click',start);
@@ -1458,7 +1059,7 @@ function bind(){
   if(dc) dc.addEventListener('click',function(){ document.getElementById('dlg').close(); });
   var rn=document.getElementById('rename');
   if(rn) rn.addEventListener('click',function(){
-    try{ localStorage.removeItem('vote-nom'); }catch(err){}
+    try{ localStorage.removeItem('vote19-nom'); }catch(err){}
     me=null; full();
   });
 }
@@ -1594,7 +1195,7 @@ function repaintOthers(){
 if(me){
   ensureMe();
   try{
-    var d=localStorage.getItem('vote-brouillon');
+    var d=localStorage.getItem('vote19-brouillon');
     if(d){
       var pd=JSON.parse(d), cur=state.voters[me]||{};
       var nLocal=Object.keys((pd&&pd.votes)||{}).length, nPub=Object.keys(cur.votes||{}).length;
